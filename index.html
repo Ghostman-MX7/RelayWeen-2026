@@ -63,7 +63,7 @@
       <!-- Logo de la Empresa + Título RelayWeen 2026 -->
       <div class="flex items-center gap-3">
         <div id="headerLogoContainer" onclick="handleHeaderLogoClick()" class="flex items-center justify-center rounded-xl transition">
-          <!-- Se renderiza dinámicamente el logo o el ícono de calabaza -->
+          <!-- Se renderiza dinámicamente -->
         </div>
         <div>
           <div class="flex items-center gap-2">
@@ -71,10 +71,10 @@
               RelayWeen 2026
             </h1>
             <span class="hidden sm:inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md bg-orange-500/20 text-orange-300 border border-orange-500/30">
-              Costume Parade!
+              Costume Contest
             </span>
           </div>
-          <p class="text-[11px] text-slate-400" id="statusSubtitle">Desliza para conocer a los 32 participantes</p>
+          <p class="text-[11px] text-slate-400" id="statusSubtitle">Sincronizado en la nube • Desliza para ver a los participantes</p>
         </div>
       </div>
 
@@ -98,7 +98,7 @@
     <!-- ================= VISTA 1: SWIPE ESTILO BUMBLE ================= -->
     <section id="votingView" class="w-full">
       
-      <!-- Aviso si ya votó en modo dispositivo individual -->
+      <!-- Aviso si ya votó -->
       <div id="alreadyVotedBanner" class="hidden glass-card rounded-3xl p-8 text-center max-w-md mx-auto my-8 border-emerald-500/40 shadow-2xl">
         <div id="votedBannerLogo" class="mb-3 flex justify-center"></div>
         <div class="text-5xl mb-3">💛</div>
@@ -106,15 +106,12 @@
         <p class="text-slate-300 text-sm mb-5">
           Solo se permite un voto por persona. Espera al cierre de la votación para conocer al <strong>1.º, 2.º y 3.º lugar</strong>.
         </p>
-        <div id="votedForCardPreview" class="bg-slate-900/80 p-4 rounded-2xl border border-white/10 inline-flex items-center gap-3">
-          <!-- Resumen de por quién votó -->
-        </div>
+        <div id="votedForCardPreview" class="bg-slate-900/80 p-4 rounded-2xl border border-white/10 inline-flex items-center gap-3"></div>
       </div>
 
       <!-- Contenedor principal del Deck estilo Bumble -->
       <div id="activeVotingContainer" class="max-w-md mx-auto w-full flex flex-col items-center">
 
-        <!-- Barra superior de progreso y botón de salto rápido -->
         <div class="w-full flex items-center justify-between mb-2.5 px-1">
           <div class="flex items-center gap-2">
             <span id="cardCounterBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-slate-800 text-amber-300 border border-slate-700">
@@ -127,38 +124,26 @@
           </button>
         </div>
 
-        <!-- Barra de progreso tipo historias de Bumble -->
         <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-4">
           <div id="DeckProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300" style="width: 3%"></div>
         </div>
 
-        <!-- Pila de Tarjetas (Card Stack) -->
+        <!-- Pila de Tarjetas -->
         <div class="relative w-full h-[460px] sm:h-[510px] flex items-center justify-center select-none">
-          
-          <!-- Tarjeta de fondo (Siguiente participante en espera) -->
-          <div id="backgroundCard" class="next-card-preview absolute inset-0 rounded-3xl overflow-hidden bg-slate-900 border border-white/10 pointer-events-none">
-            <!-- Se llena dinámicamente -->
-          </div>
+          <div id="backgroundCard" class="next-card-preview absolute inset-0 rounded-3xl overflow-hidden bg-slate-900 border border-white/10 pointer-events-none"></div>
 
-          <!-- Tarjeta Principal Interactiva (Swipeable) -->
           <div id="mainSwipeCard" class="swipe-card relative w-full h-full rounded-3xl overflow-hidden bg-slate-900 border-2 border-white/15 shadow-2xl cursor-grab flex flex-col justify-end">
             
-            <!-- Sello dinámico: ¡MI VOTO! (Derecha) -->
             <div id="stampVote" class="opacity-0 pointer-events-none absolute top-8 left-6 z-20 border-4 border-emerald-400 text-emerald-300 bg-emerald-950/80 backdrop-blur-md font-black text-2xl px-4 py-1.5 rounded-xl transform -rotate-12 tracking-wider uppercase shadow-lg">
               💛 ¡MI VOTO!
             </div>
 
-            <!-- Sello dinámico: PASAR (Izquierda) -->
             <div id="stampPass" class="opacity-0 pointer-events-none absolute top-8 right-6 z-20 border-4 border-rose-400 text-rose-300 bg-rose-950/80 backdrop-blur-md font-black text-2xl px-4 py-1.5 rounded-xl transform rotate-12 tracking-wider uppercase shadow-lg">
               PASAR 👉
             </div>
 
-            <!-- Imagen / Avatar de fondo completo -->
-            <div id="activeCardMedia" class="absolute inset-0 bg-slate-900 flex items-center justify-center">
-              <!-- Imagen o Emoji gigante -->
-            </div>
+            <div id="activeCardMedia" class="absolute inset-0 bg-slate-900 flex items-center justify-center"></div>
 
-            <!-- Botones superiores dentro de la tarjeta -->
             <div class="absolute top-4 inset-x-4 z-20 flex items-center justify-between pointer-events-auto">
               <span id="activeCardNumber" class="bg-slate-950/75 text-amber-300 text-xs font-extrabold px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
                 Participante #1
@@ -170,7 +155,6 @@
               </div>
             </div>
 
-            <!-- Controles flotantes de Edición Rápida (Solo visibles cuando el Admin los activa) -->
             <div id="quickEditOverlay" class="hidden absolute top-14 inset-x-4 z-30 bg-slate-950/90 backdrop-blur-md p-3 rounded-2xl border border-emerald-500/50 flex flex-wrap gap-2 items-center justify-between" onpointerdown="event.stopPropagation()">
               <button onclick="triggerQuickPhotoUpload(getCurrentParticipant().id)" class="flex-1 py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs">
                 📷 Subir / Cambiar Foto
@@ -183,7 +167,6 @@
               </button>
             </div>
 
-            <!-- Información del Participante sobre degradado inferior estilo Bumble -->
             <div class="relative z-10 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pt-20 pb-6 px-6 pointer-events-none">
               <span id="activeCardCostume" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 mb-2">
                 Disfraz Sorpresa
@@ -199,44 +182,31 @@
           </div>
         </div>
 
-        <!-- Botonera Inferior Circular estilo Bumble / Tinder -->
+        <!-- Botonera Inferior -->
         <div class="flex items-center justify-center gap-4 sm:gap-6 mt-6">
-          <!-- Botón Anterior -->
-          <button onclick="prevCard()" title="Regresar al participante anterior" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
+          <button onclick="prevCard()" title="Anterior" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
             ↩️
           </button>
-
-          <!-- Botón Pasar (Swipe Left) -->
-          <button onclick="triggerSwipe('left')" title="Pasar al siguiente disfraz" class="w-16 h-16 rounded-full bg-slate-900/90 hover:bg-rose-950/60 border-2 border-rose-500/50 text-rose-400 flex flex-col items-center justify-center shadow-xl active:scale-90 transition">
+          <button onclick="triggerSwipe('left')" title="Pasar" class="w-16 h-16 rounded-full bg-slate-900/90 hover:bg-rose-950/60 border-2 border-rose-500/50 text-rose-400 flex flex-col items-center justify-center shadow-xl active:scale-90 transition">
             <span class="text-2xl leading-none">✖️</span>
             <span class="text-[9px] font-bold uppercase tracking-wider mt-0.5">Pasar</span>
           </button>
-
-          <!-- Botón Votar / Match (Swipe Right) -->
-          <button onclick="triggerSwipe('right')" title="Elegir este disfraz como mi voto" class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-yellow-300 hover:brightness-110 text-slate-950 flex flex-col items-center justify-center shadow-2xl shadow-amber-500/30 active:scale-90 transition border-4 border-amber-200">
+          <button onclick="triggerSwipe('right')" title="Votar" class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-yellow-300 hover:brightness-110 text-slate-950 flex flex-col items-center justify-center shadow-2xl shadow-amber-500/30 active:scale-90 transition border-4 border-amber-200">
             <span class="text-3xl leading-none">💛</span>
             <span class="text-[10px] font-extrabold uppercase tracking-wider mt-0.5">¡Votar!</span>
           </button>
-
-          <!-- Botón Ver Lista Completa -->
-          <button onclick="openQuickJumpModal()" title="Ver lista de los 32 participantes" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
+          <button onclick="openQuickJumpModal()" title="Ver lista" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
             📋
           </button>
         </div>
 
-        <p class="text-[11px] text-slate-400 mt-3 text-center">
-          💡 Tip: En computadora también puedes usar las flechas del teclado <strong>⬅️ Pasar</strong> y <strong>➡️ Votar</strong>
-        </p>
-
       </div>
     </section>
 
-    <!-- ================= VISTA 2: GANADORES (PODIO 1, 2 Y 3) ================= -->
+    <!-- ================= VISTA 2: GANADORES (PODIO) ================= -->
     <section id="resultsView" class="hidden py-4">
       <div class="text-center mb-10">
-        <!-- Logo de la empresa en la pantalla de premiación -->
         <div id="podiumLogoContainer" class="flex justify-center mb-4"></div>
-
         <span class="px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-amber-500/20 text-amber-300 border border-amber-500/30">
           RelayWeen 2026 • Votación Finalizada
         </span>
@@ -246,12 +216,8 @@
         <p class="text-slate-400 text-sm mt-2">Resultados oficiales del 1.º, 2.º y 3.º lugar</p>
       </div>
 
-      <!-- Podio Top 3 -->
-      <div id="podiumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end max-w-4xl mx-auto mb-12">
-        <!-- Se llena dinámicamente -->
-      </div>
+      <div id="podiumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end max-w-4xl mx-auto mb-12"></div>
 
-      <!-- Tabla completa de resultados -->
       <div class="glass-card rounded-2xl p-6 max-w-4xl mx-auto">
         <h3 class="text-lg font-bold mb-4 text-slate-200">📊 Tabla General de Votos (32 Participantes)</h3>
         <div id="fullRankingList" class="space-y-2.5 max-h-96 overflow-y-auto pr-2"></div>
@@ -260,81 +226,60 @@
 
   </main>
 
-  <!-- ================= MODAL ESTILO "BUMBLE MATCH" PARA CONFIRMAR EL VOTO ÚNICO ================= -->
+  <!-- ================= MODALES ================= -->
   <div id="matchConfirmModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl max-w-sm w-full p-6 border-2 border-amber-400/60 text-center shadow-2xl">
       <div class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-extrabold uppercase tracking-widest mb-3">
         💛 RelayWeen 2026 • ¿Es tu favorito?
       </div>
-      
-      <div id="matchCandidateAvatar" class="w-36 h-36 rounded-3xl mx-auto overflow-hidden border-4 border-amber-400 shadow-xl bg-slate-900 flex items-center justify-center text-6xl my-2">
-        🎭
-      </div>
-
+      <div id="matchCandidateAvatar" class="w-36 h-36 rounded-3xl mx-auto overflow-hidden border-4 border-amber-400 shadow-xl bg-slate-900 flex items-center justify-center text-6xl my-2">🎭</div>
       <h3 id="matchCandidateName" class="text-xl font-extrabold text-white mt-3">Participante</h3>
       <p id="matchCandidateCostume" class="text-xs font-semibold text-amber-300 mt-0.5 mb-4">Disfraz</p>
 
-      <!-- Campo de Nombre/Correo si está en Modo Kiosco -->
       <div id="kioskInputContainer" class="hidden text-left mb-4 bg-slate-900/90 p-3 rounded-2xl border border-slate-700">
-        <label class="block text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-1">
-          Tu Nombre o Correo (1 voto por persona) *
-        </label>
-        <input type="text" id="voterIdentifier" placeholder="Ej. ana.lopez@empresa.com" 
-          class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-amber-400" />
+        <label class="block text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-1">Tu Nombre o Correo (1 voto por persona) *</label>
+        <input type="text" id="voterIdentifier" placeholder="Ej. ana.lopez@empresa.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-amber-400" />
       </div>
 
-      <p class="text-xs text-slate-300 mb-5">
-        Recuerda que <strong>solo puedes votar una sola vez</strong> en RelayWeen 2026.
-      </p>
+      <p class="text-xs text-slate-300 mb-5">Recuerda que <strong>solo puedes votar una sola vez</strong> en RelayWeen 2026.</p>
 
       <div class="space-y-2.5">
-        <button onclick="confirmFinalVote()" class="w-full py-3.5 rounded-2xl font-extrabold text-sm bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400 hover:brightness-110 text-slate-950 shadow-lg shadow-amber-500/25 transition">
-          🗳️ ¡Sí, confirmar mi único voto!
-        </button>
-        <button onclick="cancelMatchVote()" class="w-full py-2.5 rounded-2xl font-semibold text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 transition">
-          👀 Todavía no, seguir viendo disfraces
-        </button>
+        <button onclick="confirmFinalVote()" class="w-full py-3.5 rounded-2xl font-extrabold text-sm bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400 text-slate-950 shadow-lg">🗳️ ¡Sí, confirmar mi único voto!</button>
+        <button onclick="cancelMatchVote()" class="w-full py-2.5 rounded-2xl font-semibold text-xs bg-slate-800 text-slate-300">👀 Todavía no, seguir viendo disfraces</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= MODAL DE SALTO RÁPIDO A CUALQUIERA DE LOS 32 PARTICIPANTES ================= -->
   <div id="quickJumpModal" onclick="closeQuickJumpModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl max-w-lg w-full p-5 border border-slate-700 max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-base font-bold text-white">🔍 Participantes de RelayWeen 2026 (32)</h3>
         <button onclick="closeQuickJumpModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
       </div>
-      <input type="text" id="jumpSearchInput" oninput="renderQuickJumpList()" placeholder="Buscar por nombre o disfraz..." 
-        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white mb-3 focus:outline-none focus:border-amber-400" />
+      <input type="text" id="jumpSearchInput" oninput="renderQuickJumpList()" placeholder="Buscar..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white mb-3" />
       <div id="quickJumpList" class="space-y-2 overflow-y-auto pr-1 flex-1"></div>
     </div>
   </div>
 
-  <!-- ================= MODAL PARA VER FOTO COMPLETA SIN RECORTE ================= -->
   <div id="photoLightbox" onclick="closeLightbox()" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="max-w-lg w-full glass-card rounded-3xl overflow-hidden border border-slate-700" onclick="event.stopPropagation()">
       <div class="relative bg-slate-950 flex items-center justify-center max-h-[75vh] overflow-hidden">
         <img id="lightboxImg" src="" alt="Disfraz" class="w-full h-auto max-h-[75vh] object-contain" />
-        <button onclick="closeLightbox()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/70 text-white hover:bg-black flex items-center justify-center text-lg font-bold">&times;</button>
+        <button onclick="closeLightbox()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center text-lg font-bold">&times;</button>
       </div>
-      <div class="p-4 flex items-center justify-between gap-4">
+      <div class="p-4 flex items-center justify-between">
         <div>
           <h4 id="lightboxTitle" class="font-bold text-white text-base"></h4>
           <p id="lightboxSubtitle" class="text-xs text-amber-300"></p>
         </div>
-        <button onclick="closeLightbox()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs">
-          Cerrar
-        </button>
+        <button onclick="closeLightbox()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- Inputs ocultos para subir foto de participante o logo de empresa -->
   <input type="file" id="hiddenFileInput" accept="image/*" class="hidden" onchange="handleQuickFileUpload(event)" />
   <input type="file" id="hiddenLogoInput" accept="image/*" class="hidden" onchange="handleLogoFileUpload(event)" />
 
-  <!-- ================= MODAL DE ADMINISTRADOR ================= -->
   <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl max-w-2xl w-full p-6 border border-slate-700 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4">
@@ -342,120 +287,94 @@
         <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
       </div>
 
-      <!-- Pantalla de bloqueo por PIN -->
       <div id="adminPinScreen">
-        <p class="text-xs text-slate-400 mb-3">Ingresa el PIN de organizador para subir el logo de la empresa, cargar fotos, editar los 32 nombres o mostrar a los ganadores:</p>
+        <p class="text-xs text-slate-400 mb-3">Ingresa el PIN de organizador (PIN: <strong>1234</strong>):</p>
         <div class="flex gap-2">
-          <input type="password" id="adminPinInput" placeholder="Ingresa el PIN" onkeydown="if(event.key==='Enter') verifyAdminPin()" class="flex-1 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm" />
-          <button onclick="verifyAdminPin()" class="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-sm">Entrar</button>
+          <input type="password" id="adminPinInput" placeholder="PIN (1234)" onkeydown="if(event.key==='Enter') verifyAdminPin()" class="flex-1 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm" />
+          <button onclick="verifyAdminPin()" class="px-5 py-2 rounded-xl bg-amber-400 text-slate-950 font-bold text-sm">Entrar</button>
         </div>
-        <p id="pinError" class="text-xs text-rose-400 mt-2 hidden">PIN incorrecto. Intenta Nuevamente.</p>
+        <p id="pinError" class="text-xs text-rose-400 mt-2 hidden">PIN incorrecto.</p>
       </div>
 
-      <!-- Controles de Admin desbloqueados -->
       <div id="adminControls" class="hidden space-y-5">
-
-        <!-- SECCIÓN NUEVA: LOGO DE LA EMPRESA -->
-        <div class="p-4 rounded-2xl bg-slate-900/90 border border-purple-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-purple-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <div id="adminLogoPreview" class="h-14 min-w-[56px] px-2 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center overflow-hidden shrink-0">
-              🎃
-            </div>
+            <div id="adminLogoPreview" class="h-14 min-w-[56px] px-2 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center overflow-hidden shrink-0">🎃</div>
             <div>
-              <h4 class="text-sm font-bold text-purple-300">🏢 Logo de la Empresa (RelayWeen 2026)</h4>
-              <p class="text-xs text-slate-400 mt-0.5">Se muestra en el encabezado y en la pantalla del podio de ganadores. Soporta PNG transparente, SVG o JPG.</p>
+              <h4 class="text-sm font-bold text-purple-300">🏢 Logo de la Empresa</h4>
+              <p class="text-xs text-slate-400">Sincronizado en la nube para todos los dispositivos.</p>
             </div>
           </div>
-          <div class="flex flex-wrap items-center gap-2 shrink-0">
-            <button onclick="triggerLogoUpload()" class="px-3.5 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold text-xs">
-              📁 Subir Logo
-            </button>
-            <button onclick="promptCompanyLogoUrl()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs">
-              🔗 URL
-            </button>
-            <button id="btnRemoveLogo" onclick="removeCompanyLogo()" class="hidden px-2.5 py-2 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs" title="Quitar logo">
-              🗑️
-            </button>
+          <div class="flex items-center gap-2">
+            <button onclick="triggerLogoUpload()" class="px-3.5 py-2 rounded-xl bg-purple-500 text-slate-950 font-bold text-xs">📁 Subir Logo</button>
+            <button id="btnRemoveLogo" onclick="removeCompanyLogo()" class="hidden px-2.5 py-2 rounded-xl bg-rose-500/20 text-rose-300 text-xs">🗑️</button>
           </div>
         </div>
         
-        <!-- Acción Rápida: Editar Fotos directamente en la tarjeta Bumble -->
-        <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between">
           <div>
-            <h4 class="text-sm font-bold text-emerald-400">📷 Subir Fotos directo en la Tarjeta Grande</h4>
-            <p class="text-xs text-slate-300 mt-0.5">Muestra un botón de cámara sobre la tarjeta principal mientras vas deslizando uno por uno.</p>
+            <h4 class="text-sm font-bold text-emerald-400">📷 Subir Fotos en la Tarjeta</h4>
+            <p class="text-xs text-slate-300">Se guardarán al instante en Firebase.</p>
           </div>
-          <button onclick="toggleQuickPhotoEdit(true)" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shrink-0">
-            ✏️ Activar en Tarjeta
-          </button>
+          <button onclick="toggleQuickPhotoEdit(true)" class="px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs">✏️ Activar</button>
         </div>
 
-        <!-- Acción 1: Finalizar o Reabrir Votación -->
         <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-          <h4 class="text-sm font-bold text-amber-400 mb-1">🏆 Revelar Ganadores (1.º, 2.º y 3.º Lugar)</h4>
-          <p class="text-xs text-slate-400 mb-3">Cierra la votación y presenta el podio oficial de RelayWeen 2026 con confeti y fotos.</p>
-          <div class="flex flex-wrap gap-2">
-            <button onclick="finishVoting()" class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-bold text-xs">
-              🎉 Finalizar y Mostrar Podio
-            </button>
-            <button onclick="reopenVoting()" class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs">
-              🔄 Volver a Tarjetas
-            </button>
+          <h4 class="text-sm font-bold text-amber-400 mb-1">🏆 Estado de la Votación</h4>
+          <div class="flex gap-2 mt-2">
+            <button onclick="finishVoting()" class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-bold text-xs">🎉 Mostrar Podio</button>
+            <button onclick="reopenVoting()" class="py-2.5 px-4 rounded-xl bg-slate-800 text-slate-200 text-xs">🔄 Volver a Tarjetas</button>
           </div>
         </div>
 
-        <!-- Acción 2: Gestor Individual de los 32 Participantes -->
         <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="text-sm font-bold text-orange-400">🖼️ Lista de los 32 Participantes (Fotos y Nombres)</h4>
-            <span class="text-[11px] text-slate-400">Auto-compresión ligera</span>
-          </div>
+          <h4 class="text-sm font-bold text-orange-400 mb-2">🖼️ Gestor de los 32 Participantes</h4>
           <div id="adminParticipantsPhotoList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- Acción 3: Pegar lista de nombres en bloque -->
         <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-          <h4 class="text-sm font-bold text-slate-200 mb-1">📝 Pegar los 32 Nombres en Bloque</h4>
-          <p class="text-xs text-slate-400 mb-2">Un participante por renglón (ej: <em>Carlos Ruiz - Drácula</em>). Se conservan las fotos subidas:</p>
+          <h4 class="text-sm font-bold text-slate-200 mb-1">📝 Nombres en Bloque</h4>
           <textarea id="participantsTextarea" rows="4" class="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-200 font-mono"></textarea>
-          <button onclick="saveParticipantsList()" class="mt-2 w-full py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs">
-            💾 Guardar Lista de Nombres
-          </button>
+          <button onclick="saveParticipantsList()" class="mt-2 w-full py-2 rounded-xl bg-slate-700 text-white font-bold text-xs">💾 Guardar Nombres</button>
         </div>
 
-        <!-- Acción 4: Modo de control de voto único -->
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-          <h4 class="text-sm font-bold text-purple-300 mb-1">🔒 Control de 1 Voto por Persona</h4>
-          <select id="votingModeSelect" onchange="changeVotingMode()" class="w-full mt-2 px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
-            <option value="device">1 voto por Dispositivo/Navegador (Se bloquea al confirmar su voto)</option>
-            <option value="kiosk">Modo Kiosco / Laptop compartida (Pide Nombre o Correo al confirmar el Match)</option>
-          </select>
-        </div>
-
-        <!-- Acción 5: Reiniciar votos -->
         <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
-          <span class="text-xs text-slate-500">¿Limpiar votos de prueba?</span>
-          <button onclick="resetAllVotes()" class="text-xs text-rose-400 hover:underline font-semibold">
-            🗑️ Reiniciar votos a 0 (conserva fotos y logo)
-          </button>
+          <span class="text-xs text-slate-500">¿Reiniciar pruebas?</span>
+          <button onclick="resetAllVotes()" class="text-xs text-rose-400 hover:underline font-semibold">🗑️ Poner votos a 0</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= LÓGICA DE LA APLICACIÓN ================= -->
-  <script>
-    const ADMIN_PIN = "2026";
-    const STORAGE_KEY = "costumeContestState_photos_v2"; // Misma llave para conservar tus fotos y nombres
+  <!-- ================= LÓGICA CON FIREBASE (MODULAR SDK 13.x) ================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-storage.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyBM6w_S_s2T0HdQV9PAlVbGDiSnVegixg0",
+      authDomain: "rhc-custome-parade.firebaseapp.com",
+      projectId: "rhc-custome-parade",
+      storageBucket: "rhc-custome-parade.firebasestorage.app",
+      messagingSenderId: "678460812984",
+      appId: "1:678460812984:web:4a687202e7dddb7c370e4d",
+      measurementId: "G-J2EXLB2R96"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const ADMIN_PIN = "1234";
     const PARTICIPANTES_INICIALES = Array.from({ length: 32 }, (_, i) => `${i + 1}. Participante ${i + 1} - Disfraz Sorpresa`);
     const EMOJIS = ["🧛", "🧟", "🧙‍♀️", "👻", "🎃", "🦸‍♂️", "🦹‍♀️", "🤡", "👽", "🤖", "🏴‍☠️", "🤠", "🥷", "👑", "🦄", "🐲"];
 
     let state = {
-      companyLogo: null, // Guarda el logo de la empresa (Base64 PNG o URL)
+      companyLogo: null,
       participants: [],
       isFinished: false,
-      votingMode: "device", // 'device' | 'kiosk'
+      votingMode: "device",
       deviceHasVoted: false,
       deviceVotedFor: null,
       votersRegistry: []
@@ -464,164 +383,89 @@
     let currentIndex = 0;
     let quickPhotoEditMode = false;
     let currentPhotoUploadTargetId = null;
-
-    // Variables para física de Swipe
     let isDragging = false;
     let startX = 0;
     let currentDeltaX = 0;
 
+    // Exponer funciones globales para que los botones HTML las reconozcan
+    window.openAdminModal = openAdminModal;
+    window.closeAdminModal = closeAdminModal;
+    window.verifyAdminPin = verifyAdminPin;
+    window.toggleQuickPhotoEdit = toggleQuickPhotoEdit;
+    window.triggerQuickPhotoUpload = triggerQuickPhotoUpload;
+    window.quickRenameParticipant = quickRenameParticipant;
+    window.removeParticipantPhoto = removeParticipantPhoto;
+    window.triggerLogoUpload = triggerLogoUpload;
+    window.removeCompanyLogo = removeCompanyLogo;
+    window.handleHeaderLogoClick = handleHeaderLogoClick;
+    window.finishVoting = finishVoting;
+    window.reopenVoting = reopenVoting;
+    window.resetAllVotes = resetAllVotes;
+    window.saveParticipantsList = saveParticipantsList;
+    window.prevCard = prevCard;
+    window.triggerSwipe = triggerSwipe;
+    window.openQuickJumpModal = openQuickJumpModal;
+    window.closeQuickJumpModal = closeQuickJumpModal;
+    window.renderQuickJumpList = renderQuickJumpList;
+    window.confirmFinalVote = confirmFinalVote;
+    window.cancelMatchVote = cancelMatchVote;
+    window.openLightboxCurrent = openLightboxCurrent;
+    window.openLightbox = openLightbox;
+    window.closeLightbox = closeLightbox;
+    window.updateSingleParticipantName = updateSingleParticipantName;
+
     function initApp() {
-      const savedState = localStorage.getItem(STORAGE_KEY);
-      if (savedState) {
-        try {
-          const parsed = JSON.parse(savedState);
-          state = { ...state, ...parsed };
-        } catch (e) {
+      onSnapshot(doc(db, "relayween", "contestState"), (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          state.companyLogo = data.companyLogo || null;
+          state.participants = data.participants || [];
+          state.isFinished = data.isFinished || false;
+          state.votingMode = data.votingMode || "device";
+          state.votersRegistry = data.votersRegistry || [];
+
+          if (!state.participants.length) {
+            resetDefaultState();
+          } else {
+            updateUI();
+          }
+        } else {
           resetDefaultState();
         }
-      } else {
-        resetDefaultState();
-      }
+      }, (error) => {
+        console.log("Error al sincronizar con Firebase:", error);
+      });
+
       setupSwipeListeners();
-      updateUI();
     }
 
-    function resetDefaultState() {
-      state.participants = PARTICIPANTES_INICIALES.map((name, index) => ({
+    async function resetDefaultState() {
+      const initialParts = PARTICIPANTES_INICIALES.map((name, index) => ({
         id: index + 1,
         name: name,
         votes: 0,
         emoji: EMOJIS[index % EMOJIS.length],
         photo: null
       }));
-      saveState();
+      state.participants = initialParts;
+      await saveStateToCloud();
     }
 
-    function saveState() {
+    async function saveStateToCloud() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        alert("⚠️ Memoria local llena. Intenta usar imágenes más ligeras.");
+        await setDoc(doc(db, "relayween", "contestState"), {
+          companyLogo: state.companyLogo,
+          participants: state.participants,
+          isFinished: state.isFinished,
+          votingMode: state.votingMode,
+          votersRegistry: state.votersRegistry
+        });
+      } catch (err) {
+        console.error("Error al guardar en Firebase:", err);
       }
       updateTotalVotesBadge();
     }
 
-    // ================= GESTIÓN DEL LOGO DE LA EMPRESA =================
-    function renderCompanyLogos() {
-      const headerContainer = document.getElementById("headerLogoContainer");
-      const podiumLogoContainer = document.getElementById("podiumLogoContainer");
-      const votedBannerLogo = document.getElementById("votedBannerLogo");
-      const adminPreview = document.getElementById("adminLogoPreview");
-      const btnRemoveLogo = document.getElementById("btnRemoveLogo");
-
-      if (state.companyLogo) {
-        headerContainer.innerHTML = `
-          <div class="relative group cursor-pointer" title="${quickPhotoEditMode ? 'Clic para cambiar el logo' : 'RelayWeen 2026'}">
-            <img src="${state.companyLogo}" alt="Logo Empresa" class="h-10 sm:h-11 w-auto max-w-[150px] object-contain rounded-lg" />
-            ${quickPhotoEditMode ? '<span class="absolute -top-1.5 -right-1.5 bg-emerald-500 text-slate-950 text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow">✏️</span>' : ''}
-          </div>
-        `;
-        podiumLogoContainer.innerHTML = `<img src="${state.companyLogo}" alt="Logo Empresa" class="h-16 md:h-20 w-auto max-w-[240px] object-contain drop-shadow-lg" />`;
-        votedBannerLogo.innerHTML = `<img src="${state.companyLogo}" alt="Logo Empresa" class="h-12 w-auto max-w-[180px] object-contain" />`;
-        if (adminPreview) {
-          adminPreview.innerHTML = `<img src="${state.companyLogo}" alt="Logo" class="h-11 w-auto max-w-[110px] object-contain" />`;
-        }
-        if (btnRemoveLogo) btnRemoveLogo.classList.remove("hidden");
-      } else {
-        headerContainer.innerHTML = `
-          <div class="w-10 h-10 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-2xl relative ${quickPhotoEditMode ? 'cursor-pointer border-emerald-400' : ''}" title="${quickPhotoEditMode ? 'Clic para subir logo de la empresa' : 'RelayWeen 2026'}">
-            🎃
-            ${quickPhotoEditMode ? '<span class="absolute -top-1.5 -right-1.5 bg-emerald-500 text-slate-950 text-[10px] font-bold px-1 rounded-full shadow">+Logo</span>' : ''}
-          </div>
-        `;
-        podiumLogoContainer.innerHTML = "";
-        votedBannerLogo.innerHTML = "";
-        if (adminPreview) adminPreview.innerHTML = `<span class="text-2xl">🎃</span>`;
-        if (btnRemoveLogo) btnRemoveLogo.classList.add("hidden");
-      }
-    }
-
-    function handleHeaderLogoClick() {
-      if (quickPhotoEditMode) {
-        triggerLogoUpload();
-      }
-    }
-
-    function triggerLogoUpload() {
-      const input = document.getElementById("hiddenLogoInput");
-      input.value = "";
-      input.click();
-    }
-
-    // Procesa el logo respetando el fondo transparente (PNG/SVG)
-    function processLogoImage(file, maxWidth = 500, maxHeight = 200) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          // Si es SVG, guardar directamente
-          if (file.type === "image/svg+xml") {
-            resolve(event.target.result);
-            return;
-          }
-          const img = new Image();
-          img.onload = () => {
-            let width = img.width;
-            let height = img.height;
-            if (width > maxWidth) {
-              height = Math.round((height * maxWidth) / width);
-              width = maxWidth;
-            }
-            if (height > maxHeight) {
-              width = Math.round((width * maxHeight) / height);
-              height = maxHeight;
-            }
-            const canvas = document.createElement("canvas");
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-            ctx.drawImage(img, 0, 0, width, height);
-            // Exportar como PNG para conservar la transparencia del logo corporativo
-            resolve(canvas.toDataURL("image/png"));
-          };
-          img.onerror = reject;
-          img.src = event.target.result;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function handleLogoFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      try {
-        const logoDataUrl = await processLogoImage(file);
-        state.companyLogo = logoDataUrl;
-        saveState();
-        renderCompanyLogos();
-      } catch (err) {
-        alert("No se pudo cargar el archivo del logo.");
-      }
-    }
-
-    function promptCompanyLogoUrl() {
-      const current = state.companyLogo && state.companyLogo.startsWith("http") ? state.companyLogo : "";
-      const url = prompt("Pega el enlace directo (URL) del logo de la empresa:", current);
-      if (url !== null && url.trim() !== "") {
-        state.companyLogo = url.trim();
-        saveState();
-        renderCompanyLogos();
-      }
-    }
-
-    function removeCompanyLogo() {
-      state.companyLogo = null;
-      saveState();
-      renderCompanyLogos();
-    }
-
-    // ================= PARTICIPANTES Y TARJETA BUMBLE =================
     function getCurrentParticipant() {
       if (!state.participants.length) return null;
       if (currentIndex >= state.participants.length) currentIndex = 0;
@@ -693,7 +537,13 @@
       }
     }
 
-    // ================= FÍSICA E INTERACCIÓN SWIPE =================
+    async function uploadImageToFirebase(file, pathFolder) {
+      const storageRef = ref(storage, `${pathFolder}/${Date.now()}_${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return downloadURL;
+    }
+
     function setupSwipeListeners() {
       const card = document.getElementById("mainSwipeCard");
 
@@ -741,20 +591,6 @@
           resetCardPosition();
         }
         currentDeltaX = 0;
-      });
-
-      window.addEventListener("keydown", (e) => {
-        if (state.isFinished) return;
-        const modalOpen = !document.getElementById("matchConfirmModal").classList.contains("hidden") ||
-                          !document.getElementById("adminModal").classList.contains("hidden") ||
-                          !document.getElementById("quickJumpModal").classList.contains("hidden");
-        if (modalOpen) return;
-
-        if (e.key === "ArrowLeft") {
-          triggerSwipe("left");
-        } else if (e.key === "ArrowRight") {
-          triggerSwipe("right");
-        }
       });
     }
 
@@ -807,7 +643,6 @@
       renderCurrentCard();
     }
 
-    // ================= CONFIRMACIÓN DE VOTO ÚNICO (MODAL MATCH) =================
     function openMatchConfirmModal() {
       const p = getCurrentParticipant();
       if (!p) return;
@@ -817,11 +652,7 @@
       document.getElementById("matchCandidateCostume").textContent = `🎭 ${costumeDesc}`;
 
       const avatarBox = document.getElementById("matchCandidateAvatar");
-      if (p.photo) {
-        avatarBox.innerHTML = `<img src="${p.photo}" class="w-full h-full object-cover" />`;
-      } else {
-        avatarBox.innerHTML = `<span>${p.emoji}</span>`;
-      }
+      avatarBox.innerHTML = p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover" />` : `<span>${p.emoji}</span>`;
 
       const kioskBox = document.getElementById("kioskInputContainer");
       if (state.votingMode === "kiosk") {
@@ -837,7 +668,7 @@
       document.getElementById("matchConfirmModal").classList.add("hidden");
     }
 
-    function confirmFinalVote() {
+    async function confirmFinalVote() {
       const candidate = getCurrentParticipant();
       if (!candidate) return;
 
@@ -845,19 +676,19 @@
         const voterInput = document.getElementById("voterIdentifier");
         const voterId = voterInput.value.trim().toLowerCase();
         if (!voterId) {
-          alert("Por favor escribe tu nombre o correo para registrar tu voto.");
+          alert("Escribe tu nombre o correo.");
           voterInput.focus();
           return;
         }
         if (state.votersRegistry.includes(voterId)) {
-          alert("⚠️ Este nombre o correo ya votó anteriormente. Solo se permite un voto por persona.");
+          alert("⚠️ Este nombre o correo ya votó anteriormente.");
           return;
         }
         state.votersRegistry.push(voterId);
         voterInput.value = "";
       } else {
         if (state.deviceHasVoted) {
-          alert("Ya has emitido tu voto desde este dispositivo.");
+          alert("Ya votaste desde este dispositivo.");
           return;
         }
         state.deviceHasVoted = true;
@@ -865,21 +696,17 @@
       }
 
       candidate.votes += 1;
-      saveState();
+      await saveStateToCloud();
       document.getElementById("matchConfirmModal").classList.add("hidden");
 
       if (typeof confetti === "function") {
         confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 } });
       }
 
-      if (state.votingMode === "kiosk") {
-        alert(`💛 ¡Voto registrado para ${candidate.name} en RelayWeen 2026! Pantalla lista para la siguiente persona.`);
-        currentIndex = 0;
-      }
+      alert(`💛 ¡Voto registrado para ${candidate.name} en RelayWeen 2026!`);
       updateUI();
     }
 
-    // ================= BUSCADOR / SALTO RÁPIDO A PARTICIPANTE =================
     function openQuickJumpModal() {
       document.getElementById("quickJumpModal").classList.remove("hidden");
       document.getElementById("jumpSearchInput").value = "";
@@ -903,7 +730,7 @@
           : `<div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-lg shrink-0">${p.emoji}</div>`;
 
         const item = document.createElement("div");
-        item.className = `p-2.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition ${idx === currentIndex ? 'bg-amber-500/20 border-amber-400' : 'bg-slate-900/70 border-slate-800 hover:bg-slate-800'}`;
+        item.className = `p-2.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition ${idx === currentIndex ? 'bg-amber-500/20 border-amber-400' : 'bg-slate-900/70 border-slate-800'}`;
         item.onclick = () => {
           currentIndex = idx;
           renderCurrentCard();
@@ -917,13 +744,12 @@
               <p class="text-[11px] text-amber-300 truncate">${costumeDesc}</p>
             </div>
           </div>
-          <span class="text-xs font-bold text-slate-400 shrink-0">Ver 👉</span>
+          <span class="text-xs font-bold text-slate-400">Ver 👉</span>
         `;
         list.appendChild(item);
       });
     }
 
-    // ================= ACTUALIZACIÓN GENERAL DE INTERFAZ =================
     function updateTotalVotesBadge() {
       const total = state.participants.reduce((acc, p) => acc + p.votes, 0);
       document.getElementById("totalVotesBadge").textContent = `${total} ${total === 1 ? 'voto' : 'votos'}`;
@@ -935,11 +761,8 @@
       document.getElementById("votingModeSelect").value = state.votingMode;
 
       const quickBtn = document.getElementById("quickEditBannerBtn");
-      if (quickPhotoEditMode) {
-        quickBtn.classList.remove("hidden");
-      } else {
-        quickBtn.classList.add("hidden");
-      }
+      if (quickPhotoEditMode) quickBtn.classList.remove("hidden");
+      else quickBtn.classList.add("hidden");
 
       if (state.isFinished) {
         document.getElementById("votingView").classList.add("hidden");
@@ -950,25 +773,16 @@
         document.getElementById("resultsView").classList.add("hidden");
         document.getElementById("votingView").classList.remove("hidden");
         document.getElementById("statusSubtitle").textContent = quickPhotoEditMode
-          ? "🔧 MODO EDICIÓN • Sube fotos o haz clic en el logo para cambiarlo"
-          : "Desliza 👈 para pasar o 👉 para votar por tu favorito";
+          ? "🔧 MODO EDICIÓN • Sube fotos en la tarjeta"
+          : "Desliza 👈 para pasar o 👉 para votar";
 
         if (state.votingMode === "device" && state.deviceHasVoted && !quickPhotoEditMode) {
           document.getElementById("alreadyVotedBanner").classList.remove("hidden");
           document.getElementById("activeVotingContainer").classList.add("hidden");
-
           const votedP = state.participants.find(p => p.name === state.deviceVotedFor) || { name: state.deviceVotedFor, emoji: "🎭" };
           const preview = document.getElementById("votedForCardPreview");
-          const thumb = votedP.photo
-            ? `<img src="${votedP.photo}" class="w-12 h-12 rounded-xl object-cover" />`
-            : `<span class="text-3xl">${votedP.emoji || '🎭'}</span>`;
-          preview.innerHTML = `
-            ${thumb}
-            <div class="text-left">
-              <p class="text-[11px] text-slate-400">Le diste tu voto a:</p>
-              <p class="text-sm font-bold text-amber-300">${votedP.name}</p>
-            </div>
-          `;
+          const thumb = votedP.photo ? `<img src="${votedP.photo}" class="w-12 h-12 rounded-xl object-cover" />` : `<span class="text-3xl">${votedP.emoji || '🎭'}</span>`;
+          preview.innerHTML = `${thumb}<div class="text-left"><p class="text-[11px] text-slate-400">Le diste tu voto a:</p><p class="text-sm font-bold text-amber-300">${votedP.name}</p></div>`;
         } else {
           document.getElementById("alreadyVotedBanner").classList.add("hidden");
           document.getElementById("activeVotingContainer").classList.remove("hidden");
@@ -977,7 +791,107 @@
       }
     }
 
-    // ================= LIGHTBOX Y SUBIDA DE FOTOS DE PARTICIPANTES =================
+    function renderCompanyLogos() {
+      const headerContainer = document.getElementById("headerLogoContainer");
+      const podiumLogoContainer = document.getElementById("podiumLogoContainer");
+      const votedBannerLogo = document.getElementById("votedBannerLogo");
+      const adminPreview = document.getElementById("adminLogoPreview");
+      const btnRemoveLogo = document.getElementById("btnRemoveLogo");
+
+      if (state.companyLogo) {
+        headerContainer.innerHTML = `<img src="${state.companyLogo}" class="h-10 sm:h-11 w-auto max-w-[150px] object-contain rounded-lg" />`;
+        podiumLogoContainer.innerHTML = `<img src="${state.companyLogo}" class="h-16 md:h-20 w-auto max-w-[240px] object-contain drop-shadow-lg" />`;
+        votedBannerLogo.innerHTML = `<img src="${state.companyLogo}" class="h-12 w-auto max-w-[180px] object-contain" />`;
+        if (adminPreview) adminPreview.innerHTML = `<img src="${state.companyLogo}" class="h-11 w-auto max-w-[110px] object-contain" />`;
+        if (btnRemoveLogo) btnRemoveLogo.classList.remove("hidden");
+      } else {
+        headerContainer.innerHTML = `<div class="w-10 h-10 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-2xl">🎃</div>`;
+        podiumLogoContainer.innerHTML = "";
+        votedBannerLogo.innerHTML = "";
+        if (adminPreview) adminPreview.innerHTML = `<span class="text-2xl">🎃</span>`;
+        if (btnRemoveLogo) btnRemoveLogo.classList.add("hidden");
+      }
+    }
+
+    function triggerLogoUpload() {
+      document.getElementById("hiddenLogoInput").click();
+    }
+
+    window.handleLogoFileUpload = async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadImageToFirebase(file, "logos");
+        state.companyLogo = url;
+        await saveStateToCloud();
+        renderCompanyLogos();
+      } catch (err) {
+        alert("Error al subir el logo.");
+      }
+    };
+
+    async function removeCompanyLogo() {
+      state.companyLogo = null;
+      await saveStateToCloud();
+      renderCompanyLogos();
+    }
+
+    function handleHeaderLogoClick() {
+      if (quickPhotoEditMode) triggerLogoUpload();
+    }
+
+    function toggleQuickPhotoEdit(enable) {
+      quickPhotoEditMode = enable;
+      if (enable) closeAdminModal();
+      updateUI();
+    }
+
+    function triggerQuickPhotoUpload(participantId) {
+      currentPhotoUploadTargetId = participantId;
+      document.getElementById("hiddenFileInput").click();
+    }
+
+    window.handleQuickFileUpload = async function(event) {
+      const file = event.target.files[0];
+      if (!file || !currentPhotoUploadTargetId) return;
+      try {
+        const url = await uploadImageToFirebase(file, "participantes");
+        const p = state.participants.find(item => item.id === currentPhotoUploadTargetId);
+        if (p) {
+          p.photo = url;
+          await saveStateToCloud();
+          renderCurrentCard();
+          if (!document.getElementById("adminModal").classList.contains("hidden")) {
+            renderAdminPhotoList();
+          }
+        }
+      } catch (err) {
+        alert("Error al subir la foto.");
+      }
+    };
+
+    function quickRenameParticipant(participantId) {
+      const p = state.participants.find(item => item.id === participantId);
+      if (!p) return;
+      const newName = prompt("Nombre y disfraz:", p.name);
+      if (newName && newName.trim()) {
+        p.name = newName.trim();
+        saveStateToCloud();
+        renderCurrentCard();
+      }
+    }
+
+    async function removeParticipantPhoto(participantId) {
+      const p = state.participants.find(item => item.id === participantId);
+      if (!p) return;
+      p.photo = null;
+      await saveStateToCloud();
+      renderCurrentCard();
+      if (!document.getElementById("adminModal").classList.contains("hidden")) {
+        renderAdminPhotoList();
+      }
+    }
+
     function openLightboxCurrent() {
       const p = getCurrentParticipant();
       if (p && p.photo) openLightbox(p.id);
@@ -997,102 +911,6 @@
       document.getElementById("photoLightbox").classList.add("hidden");
     }
 
-    function compressImageFile(file, maxWidth = 600, maxHeight = 600, quality = 0.8) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const img = new Image();
-          img.onload = () => {
-            let width = img.width;
-            let height = img.height;
-            if (width > height) {
-              if (width > maxWidth) {
-                height = Math.round((height * maxWidth) / width);
-                width = maxWidth;
-              }
-            } else {
-              if (height > maxHeight) {
-                width = Math.round((width * maxHeight) / height);
-                height = maxHeight;
-              }
-            }
-            const canvas = document.createElement("canvas");
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL("image/jpeg", quality));
-          };
-          img.onerror = reject;
-          img.src = event.target.result;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function toggleQuickPhotoEdit(enable) {
-      quickPhotoEditMode = enable;
-      if (enable) closeAdminModal();
-      updateUI();
-    }
-
-    function triggerQuickPhotoUpload(participantId) {
-      currentPhotoUploadTargetId = participantId;
-      const fileInput = document.getElementById("hiddenFileInput");
-      fileInput.value = "";
-      fileInput.click();
-    }
-
-    async function handleQuickFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file || !currentPhotoUploadTargetId) return;
-      try {
-        const compressedDataUrl = await compressImageFile(file);
-        const p = state.participants.find(item => item.id === currentPhotoUploadTargetId);
-        if (p) {
-          p.photo = compressedDataUrl;
-          saveState();
-          renderCurrentCard();
-          if (!document.getElementById("adminModal").classList.contains("hidden")) {
-            renderAdminPhotoList();
-          }
-        }
-      } catch (err) {
-        alert("No se pudo procesar la imagen.");
-      }
-    }
-
-    function quickRenameParticipant(participantId) {
-      const p = state.participants.find(item => item.id === participantId);
-      if (!p) return;
-      const newName = prompt("Nombre y disfraz (separados por un guion):", p.name);
-      if (newName && newName.trim().length > 0) {
-        p.name = newName.trim();
-        saveState();
-        renderCurrentCard();
-      }
-    }
-
-    function removeParticipantPhoto(participantId) {
-      const p = state.participants.find(item => item.id === participantId);
-      if (!p) return;
-      p.photo = null;
-      saveState();
-      renderCurrentCard();
-      if (!document.getElementById("adminModal").classList.contains("hidden")) {
-        renderAdminPhotoList();
-      }
-    }
-
-    // ================= PODIO DE GANADORES (1, 2 Y 3 LUGAR) =================
-    function getAvatarMarkup(p, sizeClass = "w-24 h-24", textClass = "text-4xl") {
-      if (p.photo) {
-        return `<img src="${p.photo}" alt="${p.name}" class="${sizeClass} rounded-2xl object-cover mx-auto border-2 border-white/20 shadow-lg my-3 cursor-pointer" onclick="openLightbox(${p.id})" />`;
-      }
-      return `<div class="${sizeClass} rounded-2xl bg-slate-900/80 border border-white/10 flex items-center justify-center ${textClass} mx-auto my-3">${p.emoji || '🎭'}</div>`;
-    }
-
     function renderResults() {
       const sorted = [...state.participants].sort((a, b) => b.votes - a.votes);
       const totalVotes = sorted.reduce((acc, p) => acc + p.votes, 0);
@@ -1105,25 +923,23 @@
         <div class="podium-2 rounded-2xl p-6 text-center order-2 md:order-1 transform md:translate-y-4">
           <div class="text-3xl mb-1">🥈</div>
           <span class="text-xs font-extrabold uppercase tracking-widest text-slate-300 bg-slate-800 px-3 py-1 rounded-full">2.º Lugar</span>
-          ${getAvatarMarkup(second, "w-24 h-24", "text-4xl")}
+          ${second.photo ? `<img src="${second.photo}" class="w-24 h-24 rounded-2xl object-cover mx-auto my-3 cursor-pointer" onclick="openLightbox(${second.id})" />` : `<div class="w-24 h-24 rounded-2xl bg-slate-900 flex items-center justify-center text-4xl mx-auto my-3">${second.emoji}</div>`}
           <h3 class="text-base font-extrabold text-white">${second.name}</h3>
-          <p class="text-2xl font-black text-slate-200 mt-2">${second.votes} <span class="text-xs font-normal text-slate-400">votos</span></p>
+          <p class="text-2xl font-black text-slate-200 mt-2">${second.votes} votos</p>
         </div>
-
-        <div class="podium-1 rounded-2xl p-8 text-center order-1 md:order-2 shadow-2xl shadow-yellow-500/20 relative">
+        <div class="podium-1 rounded-2xl p-8 text-center order-1 md:order-2 shadow-2xl relative">
           <div class="text-4xl mb-1">👑</div>
           <span class="text-xs font-extrabold uppercase tracking-widest text-slate-950 bg-yellow-400 px-4 py-1 rounded-full">1.º Lugar • RelayWeen 2026</span>
-          ${getAvatarMarkup(first, "w-32 h-32", "text-5xl")}
+          ${first.photo ? `<img src="${first.photo}" class="w-32 h-32 rounded-2xl object-cover mx-auto my-3 cursor-pointer" onclick="openLightbox(${first.id})" />` : `<div class="w-32 h-32 rounded-2xl bg-slate-900 flex items-center justify-center text-5xl mx-auto my-3">${first.emoji}</div>`}
           <h3 class="text-xl md:text-2xl font-extrabold text-yellow-300">${first.name}</h3>
-          <p class="text-3xl font-black text-white mt-2">${first.votes} <span class="text-sm font-normal text-yellow-200/80">votos</span></p>
+          <p class="text-3xl font-black text-white mt-2">${first.votes} votos</p>
         </div>
-
         <div class="podium-3 rounded-2xl p-6 text-center order-3 transform md:translate-y-6">
           <div class="text-3xl mb-1">🥉</div>
           <span class="text-xs font-extrabold uppercase tracking-widest text-orange-200 bg-orange-950/80 px-3 py-1 rounded-full">3.º Lugar</span>
-          ${getAvatarMarkup(third, "w-24 h-24", "text-4xl")}
+          ${third.photo ? `<img src="${third.photo}" class="w-24 h-24 rounded-2xl object-cover mx-auto my-3 cursor-pointer" onclick="openLightbox(${third.id})" />` : `<div class="w-24 h-24 rounded-2xl bg-slate-900 flex items-center justify-center text-4xl mx-auto my-3">${third.emoji}</div>`}
           <h3 class="text-base font-extrabold text-white">${third.name}</h3>
-          <p class="text-2xl font-black text-orange-300 mt-2">${third.votes} <span class="text-xs font-normal text-slate-400">votos</span></p>
+          <p class="text-2xl font-black text-orange-300 mt-2">${third.votes} votos</p>
         </div>
       `;
 
@@ -1132,14 +948,9 @@
       sorted.forEach((p, idx) => {
         const pct = totalVotes > 0 ? Math.round((p.votes / totalVotes) * 100) : 0;
         const badge = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`;
-        const miniThumb = p.photo
-          ? `<img src="${p.photo}" class="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0 cursor-pointer" onclick="openLightbox(${p.id})" />`
-          : `<div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-lg shrink-0">${p.emoji}</div>`;
-
         rankingList.innerHTML += `
           <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 flex items-center gap-3">
             <span class="w-8 text-center font-bold text-sm text-slate-300">${badge}</span>
-            ${miniThumb}
             <div class="flex-1 min-w-0">
               <div class="flex justify-between text-xs font-semibold mb-1">
                 <span class="text-white truncate">${p.name}</span>
@@ -1154,7 +965,6 @@
       });
     }
 
-    // ================= PANEL DE ADMINISTRADOR =================
     function openAdminModal() {
       document.getElementById("adminModal").classList.remove("hidden");
       document.getElementById("adminPinScreen").classList.remove("hidden");
@@ -1173,7 +983,6 @@
         document.getElementById("adminPinScreen").classList.add("hidden");
         document.getElementById("adminControls").classList.remove("hidden");
         document.getElementById("participantsTextarea").value = state.participants.map(p => p.name).join("\n");
-        renderCompanyLogos();
         renderAdminPhotoList();
       } else {
         document.getElementById("pinError").classList.remove("hidden");
@@ -1186,26 +995,14 @@
 
       state.participants.forEach(p => {
         const row = document.createElement("div");
-        row.className = "p-2.5 rounded-xl bg-slate-950/90 border border-slate-800 flex flex-wrap sm:flex-nowrap items-center gap-2.5";
-
-        const thumbHtml = p.photo
-          ? `<img src="${p.photo}" class="w-10 h-10 rounded-lg object-cover border border-emerald-500/50 shrink-0" />`
-          : `<div class="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-lg shrink-0">${p.emoji}</div>`;
+        row.className = "p-2.5 rounded-xl bg-slate-950/90 border border-slate-800 flex items-center gap-2.5";
+        const thumbHtml = p.photo ? `<img src="${p.photo}" class="w-10 h-10 rounded-lg object-cover shrink-0" />` : `<div class="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-lg shrink-0">${p.emoji}</div>`;
 
         row.innerHTML = `
           ${thumbHtml}
-          <input type="text" value="${p.name.replace(/"/g, '&quot;')}" 
-            onchange="updateSingleParticipantName(${p.id}, this.value)"
-            class="flex-1 min-w-[150px] px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white" />
-          <div class="flex items-center gap-1.5">
-            <button onclick="triggerQuickPhotoUpload(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold">
-              📷 Subir
-            </button>
-            <button onclick="promptPhotoUrl(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">
-              🔗 URL
-            </button>
-            ${p.photo ? `<button onclick="removeParticipantPhoto(${p.id})" class="px-2 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 text-xs">🗑️</button>` : ''}
-          </div>
+          <input type="text" value="${p.name.replace(/"/g, '&quot;')}" onchange="updateSingleParticipantName(${p.id}, this.value)" class="flex-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white" />
+          <button onclick="triggerQuickPhotoUpload(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold">📷 Subir</button>
+          ${p.photo ? `<button onclick="removeParticipantPhoto(${p.id})" class="px-2 py-1.5 rounded-lg bg-rose-500/20 text-rose-300 text-xs">🗑️</button>` : ''}
         `;
         container.appendChild(row);
       });
@@ -1215,31 +1012,13 @@
       const p = state.participants.find(item => item.id === id);
       if (p && newName.trim()) {
         p.name = newName.trim();
-        saveState();
-        document.getElementById("participantsTextarea").value = state.participants.map(item => item.name).join("\n");
-        renderCurrentCard();
+        saveStateToCloud();
       }
     }
 
-    function promptPhotoUrl(id) {
-      const p = state.participants.find(item => item.id === id);
-      if (!p) return;
-      const url = prompt("Pega el enlace (URL) de la foto para " + p.name + ":", p.photo && p.photo.startsWith("http") ? p.photo : "");
-      if (url !== null && url.trim() !== "") {
-        p.photo = url.trim();
-        saveState();
-        renderAdminPhotoList();
-        renderCurrentCard();
-      }
-    }
-
-    function saveParticipantsList() {
-      const lines = document.getElementById("participantsTextarea").value
-        .split("\n")
-        .map(l => l.trim())
-        .filter(l => l.length > 0);
-
-      if (lines.length === 0) return;
+    async function saveParticipantsList() {
+      const lines = document.getElementById("participantsTextarea").value.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+      if (!lines.length) return;
 
       state.participants = lines.map((name, idx) => {
         const existing = state.participants[idx];
@@ -1253,49 +1032,38 @@
       });
 
       currentIndex = 0;
-      saveState();
+      await saveStateToCloud();
       renderAdminPhotoList();
-      updateUI();
-      alert(`✅ Lista de RelayWeen 2026 actualizada con ${lines.length} participantes.`);
+      alert("✅ Lista guardada en la nube con éxito.");
     }
 
-    function changeVotingMode() {
-      state.votingMode = document.getElementById("votingModeSelect").value;
-      saveState();
-      updateUI();
-    }
-
-    function finishVoting() {
+    async function finishVoting() {
       quickPhotoEditMode = false;
       state.isFinished = true;
-      saveState();
+      await saveStateToCloud();
       closeAdminModal();
-      updateUI();
-      if (typeof confetti === "function") {
-        confetti({ particleCount: 130, spread: 85, origin: { y: 0.6 } });
-      }
+      if (typeof confetti === "function") confetti({ particleCount: 130, spread: 85, origin: { y: 0.6 } });
     }
 
-    function reopenVoting() {
+    async function reopenVoting() {
       state.isFinished = false;
-      saveState();
+      await saveStateToCloud();
       closeAdminModal();
-      updateUI();
     }
 
-    function resetAllVotes() {
-      if (!confirm("¿Seguro que deseas reiniciar todos los votos a cero? (Las fotos, el logo y los nombres se conservarán).")) return;
+    async function resetAllVotes() {
+      if (!confirm("¿Reiniciar todos los votos a cero?")) return;
       state.participants.forEach(p => p.votes = 0);
       state.deviceHasVoted = false;
       state.deviceVotedFor = null;
       state.votersRegistry = [];
       state.isFinished = false;
       currentIndex = 0;
-      saveState();
+      await saveStateToCloud();
       closeAdminModal();
-      updateUI();
     }
 
+    // Arrancar la app
     initApp();
   </script>
 </body>

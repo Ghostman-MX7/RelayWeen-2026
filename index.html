@@ -40,46 +40,309 @@
       filter: blur(1px);
       transition: all 0.3s ease;
     }
+    .podium-1 {
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.25), rgba(202, 138, 4, 0.05));
+      border: 2px solid #facc15;
+    }
+    .podium-2 {
+      background: linear-gradient(135deg, rgba(226, 232, 240, 0.2), rgba(148, 163, 184, 0.05));
+      border: 2px solid #cbd5e1;
+    }
+    .podium-3 {
+      background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(194, 65, 12, 0.05));
+      border: 2px solid #fb923c;
+    }
   </style>
 </head>
 <body class="pb-12 flex flex-col min-h-screen">
 
+  <!-- ================= ENCABEZADO ================= -->
   <header class="border-b border-white/10 bg-slate-950/60 backdrop-blur-md sticky top-0 z-30">
     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Logo de la Empresa + Título RelayWeen 2026 -->
       <div class="flex items-center gap-3">
         <div id="headerLogoContainer" class="flex items-center justify-center rounded-xl transition"></div>
         <div>
-          <h1 class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-orange-400 via-amber-300 to-purple-400 bg-clip-text text-transparent">
-            RelayWeen 2026
-          </h1>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-orange-400 via-amber-300 to-purple-400 bg-clip-text text-transparent">
+              RelayWeen 2026
+            </h1>
+            <span class="hidden sm:inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md bg-orange-500/20 text-orange-300 border border-orange-500/30">
+              Costume Contest
+            </span>
+          </div>
           <p class="text-[11px] text-slate-400" id="statusSubtitle">Sincronizado en la nube • Desliza para ver a los participantes</p>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <span id="totalVotesBadge" class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">0 votos</span>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <button id="quickEditBannerBtn" onclick="toggleQuickPhotoEdit(false)" class="hidden text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition">
+          ✅ Terminar edición
+        </button>
+
+        <span id="totalVotesBadge" class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+          0 votos
+        </span>
+        <button onclick="openAdminModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          ⚙️ Admin
+        </button>
       </div>
     </div>
   </header>
 
   <main class="flex-1 max-w-5xl w-full mx-auto px-4 mt-4 flex flex-col justify-center">
+
+    <!-- ================= VISTA 1: SWIPE ESTILO BUMBLE ================= -->
     <section id="votingView" class="w-full">
+      
+      <!-- Aviso si ya votó -->
+      <div id="alreadyVotedBanner" class="hidden glass-card rounded-3xl p-8 text-center max-w-md mx-auto my-8 border-emerald-500/40 shadow-2xl">
+        <div id="votedBannerLogo" class="mb-3 flex justify-center"></div>
+        <div class="text-5xl mb-3">💛</div>
+        <h2 class="text-2xl font-extrabold text-amber-300 mb-2">¡Tu voto en RelayWeen 2026 fue registrado!</h2>
+        <p class="text-slate-300 text-sm mb-5">
+          Solo se permite un voto por dispositivo. Espera al cierre de la votación para conocer al <strong>1.º, 2.º y 3.º lugar</strong>.
+        </p>
+        <div id="votedForCardPreview" class="bg-slate-900/80 p-4 rounded-2xl border border-white/10 inline-flex items-center gap-3"></div>
+      </div>
+
+      <!-- Contenedor principal del Deck estilo Bumble -->
       <div id="activeVotingContainer" class="max-w-md mx-auto w-full flex flex-col items-center">
+
         <div class="w-full flex items-center justify-between mb-2.5 px-1">
-          <span id="cardCounterBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-slate-800 text-amber-300 border border-slate-700">1 / 32</span>
+          <div class="flex items-center gap-2">
+            <span id="cardCounterBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-slate-800 text-amber-300 border border-slate-700">
+              1 / 32
+            </span>
+            <span class="text-xs text-slate-400">Desliza 👈 pasar • 👉 votar</span>
+          </div>
+          <button onclick="openQuickJumpModal()" class="text-xs font-semibold text-amber-300 hover:text-amber-200 flex items-center gap-1 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-700">
+            🔍 Ver los 32
+          </button>
         </div>
+
+        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-4">
+          <div id="DeckProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300" style="width: 3%"></div>
+        </div>
+
+        <!-- Pila de Tarjetas -->
         <div class="relative w-full h-[460px] sm:h-[510px] flex items-center justify-center select-none">
-          <div id="mainSwipeCard" class="swipe-card relative w-full h-full rounded-3xl overflow-hidden bg-slate-900 border-2 border-white/15 shadow-2xl cursor-grab flex flex-col justify-end p-6">
-            <h2 id="activeCardName" class="text-2xl font-extrabold text-white">Cargando...</h2>
+          <div id="backgroundCard" class="next-card-preview absolute inset-0 rounded-3xl overflow-hidden bg-slate-900 border border-white/10 pointer-events-none"></div>
+
+          <div id="mainSwipeCard" class="swipe-card relative w-full h-full rounded-3xl overflow-hidden bg-slate-900 border-2 border-white/15 shadow-2xl cursor-grab flex flex-col justify-end">
+            
+            <div id="stampVote" class="opacity-0 pointer-events-none absolute top-8 left-6 z-20 border-4 border-emerald-400 text-emerald-300 bg-emerald-950/80 backdrop-blur-md font-black text-2xl px-4 py-1.5 rounded-xl transform -rotate-12 tracking-wider uppercase shadow-lg">
+              💛 ¡MI VOTO!
+            </div>
+
+            <div id="stampPass" class="opacity-0 pointer-events-none absolute top-8 right-6 z-20 border-4 border-rose-400 text-rose-300 bg-rose-950/80 backdrop-blur-md font-black text-2xl px-4 py-1.5 rounded-xl transform rotate-12 tracking-wider uppercase shadow-lg">
+              PASAR 👉
+            </div>
+
+            <div id="activeCardMedia" class="absolute inset-0 bg-slate-900 flex items-center justify-center"></div>
+
+            <div class="absolute top-4 inset-x-4 z-20 flex items-center justify-between pointer-events-auto">
+              <span id="activeCardNumber" class="bg-slate-950/75 text-amber-300 text-xs font-extrabold px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
+                Participante #1
+              </span>
+              <div class="flex items-center gap-2">
+                <button id="btnExpandPhoto" onclick="event.stopPropagation(); openLightboxCurrent()" class="hidden bg-slate-950/75 hover:bg-slate-900 text-white text-xs px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
+                  🔍 Foto completa
+                </button>
+              </div>
+            </div>
+
+            <div id="quickEditOverlay" class="hidden absolute top-14 inset-x-4 z-30 bg-slate-950/90 backdrop-blur-md p-3 rounded-2xl border border-emerald-500/50 flex flex-wrap gap-2 items-center justify-between" onpointerdown="event.stopPropagation()">
+              <button onclick="triggerQuickPhotoUpload(getCurrentParticipant().id)" class="flex-1 py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs">
+                📷 Subir / Cambiar Foto
+              </button>
+              <button onclick="quickRenameParticipant(getCurrentParticipant().id)" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
+                ✏️ Nombre
+              </button>
+              <button onclick="removeParticipantPhoto(getCurrentParticipant().id)" class="py-2 px-3 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-semibold">
+                🗑️
+              </button>
+            </div>
+
+            <div class="relative z-10 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pt-20 pb-6 px-6 pointer-events-none">
+              <span id="activeCardCostume" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 mb-2">
+                Disfraz Sorpresa
+              </span>
+              <h2 id="activeCardName" class="text-2xl sm:text-3xl font-extrabold text-white leading-tight drop-shadow">
+                Participante 1
+              </h2>
+              <p class="text-xs text-slate-300 mt-1">
+                Desliza a la derecha o toca 💛 para darle tu voto en RelayWeen 2026
+              </p>
+            </div>
+
           </div>
         </div>
+
+        <!-- Botonera Inferior -->
+        <div class="flex items-center justify-center gap-4 sm:gap-6 mt-6">
+          <button onclick="prevCard()" title="Anterior" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
+            ↩️
+          </button>
+          <button onclick="triggerSwipe('left')" title="Pasar" class="w-16 h-16 rounded-full bg-slate-900/90 hover:bg-rose-950/60 border-2 border-rose-500/50 text-rose-400 flex flex-col items-center justify-center shadow-xl active:scale-90 transition">
+            <span class="text-2xl leading-none">✖️</span>
+            <span class="text-[9px] font-bold uppercase tracking-wider mt-0.5">Pasar</span>
+          </button>
+          <button onclick="triggerSwipe('right')" title="Votar" class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 via-orange-400 to-yellow-300 hover:brightness-110 text-slate-950 flex flex-col items-center justify-center shadow-2xl shadow-amber-500/30 active:scale-90 transition border-4 border-amber-200">
+            <span class="text-3xl leading-none">💛</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider mt-0.5">¡Votar!</span>
+          </button>
+          <button onclick="openQuickJumpModal()" title="Ver lista" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
+            📋
+          </button>
+        </div>
+
       </div>
     </section>
+
+    <!-- ================= VISTA 2: GANADORES (PODIO) ================= -->
+    <section id="resultsView" class="hidden py-4">
+      <div class="text-center mb-10">
+        <div id="podiumLogoContainer" class="flex justify-center mb-4"></div>
+        <span class="px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          RelayWeen 2026 • Votación Finalizada
+        </span>
+        <h2 class="text-3xl md:text-5xl font-extrabold mt-3 bg-gradient-to-r from-yellow-300 via-orange-400 to-amber-200 bg-clip-text text-transparent">
+          🏆 Ganadores RelayWeen 2026 🏆
+        </h2>
+        <p class="text-slate-400 text-sm mt-2">Resultados oficiales del 1.º, 2.º y 3.º lugar</p>
+      </div>
+
+      <div id="podiumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end max-w-4xl mx-auto mb-12"></div>
+
+      <div class="glass-card rounded-2xl p-6 max-w-4xl mx-auto">
+        <h3 class="text-lg font-bold mb-4 text-slate-200">📊 Tabla General de Votos (32 Participantes)</h3>
+        <div id="fullRankingList" class="space-y-2.5 max-h-96 overflow-y-auto pr-2"></div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ================= MODALES ================= -->
+  <div id="matchConfirmModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-sm w-full p-6 border-2 border-amber-400/60 text-center shadow-2xl">
+      <div class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-extrabold uppercase tracking-widest mb-3">
+        💛 RelayWeen 2026 • ¿Es tu favorito?
+      </div>
+      <div id="matchCandidateAvatar" class="w-36 h-36 rounded-3xl mx-auto overflow-hidden border-4 border-amber-400 shadow-xl bg-slate-900 flex items-center justify-center text-6xl my-2">🎭</div>
+      <h3 id="matchCandidateName" class="text-xl font-extrabold text-white mt-3">Participante</h3>
+      <p id="matchCandidateCostume" class="text-xs font-semibold text-amber-300 mt-0.5 mb-4">Disfraz</p>
+
+      <p class="text-xs text-slate-300 mb-5">Recuerda que <strong>solo puedes votar una sola vez</strong> por dispositivo.</p>
+
+      <div class="space-y-2.5">
+        <button onclick="confirmFinalVote()" class="w-full py-3.5 rounded-2xl font-extrabold text-sm bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-400 text-slate-950 shadow-lg">🗳️ ¡Sí, confirmar mi único voto!</button>
+        <button onclick="cancelMatchVote()" class="w-full py-2.5 rounded-2xl font-semibold text-xs bg-slate-800 text-slate-300">👀 Todavía no, seguir viendo disfraces</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quickJumpModal" onclick="closeQuickJumpModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-lg w-full p-5 border border-slate-700 max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-bold text-white">🔍 Participantes de RelayWeen 2026 (32)</h3>
+        <button onclick="closeQuickJumpModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <input type="text" id="jumpSearchInput" oninput="renderQuickJumpList()" placeholder="Buscar..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white mb-3" />
+      <div id="quickJumpList" class="space-y-2 overflow-y-auto pr-1 flex-1"></div>
+    </div>
+  </div>
+
+  <div id="photoLightbox" onclick="closeLightbox()" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="max-w-lg w-full glass-card rounded-3xl overflow-hidden border border-slate-700" onclick="event.stopPropagation()">
+      <div class="relative bg-slate-950 flex items-center justify-center max-h-[75vh] overflow-hidden">
+        <img id="lightboxImg" src="" alt="Disfraz" class="w-full h-auto max-h-[75vh] object-contain" />
+        <button onclick="closeLightbox()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center text-lg font-bold">&times;</button>
+      </div>
+      <div class="p-4 flex items-center justify-between">
+        <div>
+          <h4 id="lightboxTitle" class="font-bold text-white text-base"></h4>
+          <p id="lightboxSubtitle" class="text-xs text-amber-300"></p>
+        </div>
+        <button onclick="closeLightbox()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="hiddenFileInput" accept="image/*" class="hidden" onchange="handleQuickFileUpload(event)" />
+  <input type="file" id="hiddenLogoInput" accept="image/*" class="hidden" onchange="handleLogoFileUpload(event)" />
+
+  <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-2xl w-full p-6 border border-slate-700 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-white">⚙️ Panel de Organizador • RelayWeen 2026</h3>
+        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+      </div>
+
+      <div id="adminPinScreen">
+        <p class="text-xs text-slate-400 mb-3">Ingresa el PIN de organizador (PIN: <strong>1234</strong>):</p>
+        <div class="flex gap-2">
+          <input type="password" id="adminPinInput" placeholder="PIN (1234)" onkeydown="if(event.key==='Enter') verifyAdminPin()" class="flex-1 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm" />
+          <button onclick="verifyAdminPin()" class="px-5 py-2 rounded-xl bg-amber-400 text-slate-950 font-bold text-sm">Entrar</button>
+        </div>
+        <p id="pinError" class="text-xs text-rose-400 mt-2 hidden">PIN incorrecto.</p>
+      </div>
+
+      <div id="adminControls" class="hidden space-y-5">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-purple-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <div id="adminLogoPreview" class="h-14 min-w-[56px] px-2 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center overflow-hidden shrink-0">🎃</div>
+            <div>
+              <h4 class="text-sm font-bold text-purple-300">🏢 Logo de la Empresa</h4>
+              <p class="text-xs text-slate-400">Sincronizado en la nube para todos.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="triggerLogoUpload()" class="px-3.5 py-2 rounded-xl bg-purple-500 text-slate-950 font-bold text-xs">📁 Subir Logo</button>
+            <button id="btnRemoveLogo" onclick="removeCompanyLogo()" class="hidden px-2.5 py-2 rounded-xl bg-rose-500/20 text-rose-300 text-xs">🗑️</button>
+          </div>
+        </div>
+        
+        <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-bold text-emerald-400">📷 Subir Fotos en la Tarjeta</h4>
+            <p class="text-xs text-slate-300">Se guardarán al instante en la nube.</p>
+          </div>
+          <button onclick="toggleQuickPhotoEdit(true)" class="px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs">✏️ Activar</button>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <h4 class="text-sm font-bold text-amber-400 mb-1">🏆 Estado de la Votación</h4>
+          <div class="flex gap-2 mt-2">
+            <button onclick="finishVoting()" class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-bold text-xs">🎉 Mostrar Podio</button>
+            <button onclick="reopenVoting()" class="py-2.5 px-4 rounded-xl bg-slate-800 text-slate-200 text-xs">🔄 Volver a Tarjetas</button>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <h4 class="text-sm font-bold text-orange-400 mb-2">🖼️ Gestor de los 32 Participantes</h4>
+          <div id="adminParticipantsPhotoList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+          <h4 class="text-sm font-bold text-slate-200 mb-1">📝 Nombres en Bloque</h4>
+          <textarea id="participantsTextarea" rows="4" class="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-200 font-mono"></textarea>
+          <button onclick="saveParticipantsList()" class="mt-2 w-full py-2 rounded-xl bg-slate-700 text-white font-bold text-xs">💾 Guardar Nombres</button>
+        </div>
+
+        <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
+          <span class="text-xs text-slate-500">¿Reiniciar pruebas?</span>
+          <button onclick="resetAllVotes()" class="text-xs text-rose-400 hover:underline font-semibold">🗑️ Poner votos a 0</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LÓGICA CON FIREBASE FIRESTORE ================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
     import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBM6w_S_s2T0HdQV9PAlVbGDiSnVegixg0",
@@ -92,7 +355,698 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    console.log("Firebase inicializado correctamente:", app.name);
+    const db = getFirestore(app);
+
+    const ADMIN_PIN = "1234";
+    const PARTICIPANTES_INICIALES = Array.from({ length: 32 }, (_, i) => `${i + 1}. Participante ${i + 1} - Disfraz Sorpresa`);
+    const EMOJIS = ["🧛", "🧟", "🧙‍♀️", "👻", "🎃", "🦸‍♂️", "🦹‍♀️", "🤡", "👽", "🤖", "🏴‍☠️", "🤠", "🥷", "👑", "🦄", "🐲"];
+
+    let state = {
+      companyLogo: null,
+      participants: [],
+      isFinished: false,
+      votingMode: "device",
+      deviceHasVoted: false,
+      deviceVotedFor: null
+    };
+
+    let currentIndex = 0;
+    let quickPhotoEditMode = false;
+    let currentPhotoUploadTargetId = null;
+    let isDragging = false;
+    let startX = 0;
+    let currentDeltaX = 0;
+
+    // Exponer funciones globales para los botones HTML
+    window.openAdminModal = openAdminModal;
+    window.closeAdminModal = closeAdminModal;
+    window.verifyAdminPin = verifyAdminPin;
+    window.toggleQuickPhotoEdit = toggleQuickPhotoEdit;
+    window.triggerQuickPhotoUpload = triggerQuickPhotoUpload;
+    window.quickRenameParticipant = quickRenameParticipant;
+    window.removeParticipantPhoto = removeParticipantPhoto;
+    window.triggerLogoUpload = triggerLogoUpload;
+    window.removeCompanyLogo = removeCompanyLogo;
+    window.finishVoting = finishVoting;
+    window.reopenVoting = reopenVoting;
+    window.resetAllVotes = resetAllVotes;
+    window.saveParticipantsList = saveParticipantsList;
+    window.prevCard = prevCard;
+    window.triggerSwipe = triggerSwipe;
+    window.openQuickJumpModal = openQuickJumpModal;
+    window.closeQuickJumpModal = closeQuickJumpModal;
+    window.renderQuickJumpList = renderQuickJumpList;
+    window.confirmFinalVote = confirmFinalVote;
+    window.cancelMatchVote = cancelMatchVote;
+    window.openLightboxCurrent = openLightboxCurrent;
+    window.openLightbox = openLightbox;
+    window.closeLightbox = closeLightbox;
+    window.updateSingleParticipantName = updateSingleParticipantName;
+
+    // Inicializar conexión en tiempo real con Firebase Firestore
+    window.addEventListener("DOMContentLoaded", () => {
+      // Revisar si este dispositivo ya votó previamente en su navegador
+      const localVoted = localStorage.getItem("relayween_device_voted");
+      if (localVoted) {
+        state.deviceHasVoted = true;
+        state.deviceVotedFor = JSON.parse(localVoted);
+      }
+
+      onSnapshot(doc(db, "relayween", "contestState"), (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          state.companyLogo = data.companyLogo || null;
+          state.participants = data.participants || [];
+          state.isFinished = data.isFinished || false;
+
+          if (!state.participants.length) {
+            resetDefaultState();
+          } else {
+            updateUI();
+          }
+        } else {
+          resetDefaultState();
+        }
+      }, (error) => {
+        console.error("Error al sincronizar con Firebase:", error);
+      });
+
+      setupSwipeListeners();
+    });
+
+    async function resetDefaultState() {
+      const initialParts = PARTICIPANTES_INICIALES.map((name, index) => ({
+        id: index + 1,
+        name: name,
+        votes: 0,
+        emoji: EMOJIS[index % EMOJIS.length],
+        photo: null
+      }));
+      state.participants = initialParts;
+      state.isFinished = false;
+      await saveStateToCloud();
+    }
+
+    async function saveStateToCloud() {
+      try {
+        await setDoc(doc(db, "relayween", "contestState"), {
+          companyLogo: state.companyLogo,
+          participants: state.participants,
+          isFinished: state.isFinished
+        });
+      } catch (err) {
+        console.error("Error al guardar en Firebase:", err);
+      }
+      updateTotalVotesBadge();
+    }
+
+    function getCurrentParticipant() {
+      if (!state.participants.length) return null;
+      if (currentIndex >= state.participants.length) currentIndex = 0;
+      if (currentIndex < 0) currentIndex = state.participants.length - 1;
+      return state.participants[currentIndex];
+    }
+
+    function getNextParticipant() {
+      if (!state.participants.length) return null;
+      const nextIdx = (currentIndex + 1) % state.participants.length;
+      return state.participants[nextIdx];
+    }
+
+    function splitNameAndCostume(fullName) {
+      const parts = fullName.split("-");
+      return {
+        mainName: parts[0].trim(),
+        costumeDesc: parts.slice(1).join("-").trim() || "Participante RelayWeen"
+      };
+    }
+
+    function updateUI() {
+      renderLogoContainers();
+      
+      if (state.isFinished) {
+        document.getElementById("votingView").classList.add("hidden");
+        document.getElementById("resultsView").classList.remove("hidden");
+        renderPodiumAndRanking();
+      } else {
+        document.getElementById("votingView").classList.remove("hidden");
+        document.getElementById("resultsView").classList.add("hidden");
+
+        if (state.deviceHasVoted) {
+          document.getElementById("activeVotingContainer").classList.add("hidden");
+          document.getElementById("alreadyVotedBanner").classList.remove("hidden");
+          renderVotedPreview();
+        } else {
+          document.getElementById("activeVotingContainer").classList.remove("hidden");
+          document.getElementById("alreadyVotedBanner").classList.add("hidden");
+          renderCurrentCard();
+        }
+      }
+      updateTotalVotesBadge();
+    }
+
+    function renderLogoContainers() {
+      const headerContainer = document.getElementById("headerLogoContainer");
+      if (state.companyLogo) {
+        headerContainer.innerHTML = `<img src="${state.companyLogo}" alt="Logo" class="h-9 w-9 object-cover rounded-xl border border-white/20" />`;
+      } else {
+        headerContainer.innerHTML = `<div class="h-9 w-9 rounded-xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-lg">🎃</div>`;
+      }
+
+      const adminPreview = document.getElementById("adminLogoPreview");
+      const btnRemoveLogo = document.getElementById("btnRemoveLogo");
+      if (state.companyLogo) {
+        adminPreview.innerHTML = `<img src="${state.companyLogo}" class="h-full w-full object-cover" />`;
+        btnRemoveLogo.classList.remove("hidden");
+      } else {
+        adminPreview.innerHTML = `🎃`;
+        btnRemoveLogo.classList.add("hidden");
+      }
+    }
+
+    function renderCurrentCard() {
+      const p = getCurrentParticipant();
+      const nextP = getNextParticipant();
+      if (!p) return;
+
+      const total = state.participants.length;
+      document.getElementById("cardCounterBadge").textContent = `${currentIndex + 1} / ${total}`;
+      const progressPct = Math.round(((currentIndex + 1) / total) * 100);
+      document.getElementById("DeckProgressBar").style.width = `${progressPct}%`;
+
+      const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+      document.getElementById("activeCardNumber").textContent = `Participante #${p.id}`;
+      document.getElementById("activeCardName").textContent = mainName;
+      document.getElementById("activeCardCostume").textContent = `🎭 ${costumeDesc}`;
+
+      const mediaContainer = document.getElementById("activeCardMedia");
+      const expandBtn = document.getElementById("btnExpandPhoto");
+
+      if (p.photo) {
+        mediaContainer.innerHTML = `<img src="${p.photo}" alt="${mainName}" class="w-full h-full object-cover pointer-events-none select-none" />`;
+        expandBtn.classList.remove("hidden");
+      } else {
+        mediaContainer.innerHTML = `
+          <div class="w-full h-full bg-gradient-to-b from-indigo-950 via-slate-900 to-slate-950 flex flex-col items-center justify-center pb-20 select-none">
+            <div class="w-36 h-36 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-7xl shadow-inner mb-3">
+              ${p.emoji}
+            </div>
+            <span class="text-xs text-slate-500 font-medium">Sin foto subida aún</span>
+          </div>
+        `;
+        expandBtn.classList.add("hidden");
+      }
+
+      const editOverlay = document.getElementById("quickEditOverlay");
+      if (quickPhotoEditMode) {
+        editOverlay.classList.remove("hidden");
+      } else {
+        editOverlay.classList.add("hidden");
+      }
+
+      const bgCard = document.getElementById("backgroundCard");
+      if (nextP && total > 1) {
+        const nextInfo = splitNameAndCostume(nextP.name);
+        bgCard.innerHTML = nextP.photo
+          ? `<img src="${nextP.photo}" class="w-full h-full object-cover opacity-60" />`
+          : `<div class="w-full h-full bg-slate-900 flex items-center justify-center text-6xl pb-16">${nextP.emoji}</div>
+             <div class="absolute bottom-6 inset-x-6"><p class="text-lg font-bold text-slate-400 truncate">${nextInfo.mainName}</p></div>`;
+      }
+    }
+
+    function setupSwipeListeners() {
+      const card = document.getElementById("mainSwipeCard");
+
+      card.addEventListener("pointerdown", (e) => {
+        if (state.isFinished || (state.deviceHasVoted && !quickPhotoEditMode)) return;
+        if (e.target.closest("button")) return;
+        isDragging = true;
+        startX = e.clientX;
+        currentDeltaX = 0;
+        card.classList.add("dragging");
+      });
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        currentDeltaX = e.clientX - startX;
+        const rotate = currentDeltaX * 0.06;
+        card.style.transform = `translateX(${currentDeltaX}px) rotate(${rotate}deg)`;
+
+        const stampVote = document.getElementById("stampVote");
+        const stampPass = document.getElementById("stampPass");
+
+        if (currentDeltaX > 25) {
+          stampVote.style.opacity = Math.min(currentDeltaX / 110, 1);
+          stampPass.style.opacity = 0;
+        } else if (currentDeltaX < -25) {
+          stampPass.style.opacity = Math.min(Math.abs(currentDeltaX) / 110, 1);
+          stampVote.style.opacity = 0;
+        } else {
+          stampVote.style.opacity = 0;
+          stampPass.style.opacity = 0;
+        }
+      });
+
+      window.addEventListener("pointerup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        card.classList.remove("dragging");
+
+        const threshold = 95;
+        if (currentDeltaX > threshold) {
+          triggerSwipe("right");
+        } else if (currentDeltaX < -threshold) {
+          triggerSwipe("left");
+        } else {
+          resetCardPosition();
+        }
+        currentDeltaX = 0;
+      });
+    }
+
+    function resetCardPosition() {
+      const card = document.getElementById("mainSwipeCard");
+      card.style.transform = "translateX(0px) rotate(0deg)";
+      document.getElementById("stampVote").style.opacity = 0;
+      document.getElementById("stampPass").style.opacity = 0;
+    }
+
+    function triggerSwipe(direction) {
+      const card = document.getElementById("mainSwipeCard");
+      const stampVote = document.getElementById("stampVote");
+      const stampPass = document.getElementById("stampPass");
+
+      if (direction === "left") {
+        stampPass.style.opacity = 1;
+        card.style.transform = "translateX(-120%) rotate(-18deg)";
+        card.style.opacity = "0";
+
+        setTimeout(() => {
+          currentIndex = (currentIndex + 1) % state.participants.length;
+          card.classList.add("dragging");
+          card.style.transform = "translateX(0px) rotate(0deg)";
+          card.style.opacity = "1";
+          resetCardPosition();
+          renderCurrentCard();
+        }, 250);
+      } else {
+        stampVote.style.opacity = 1;
+        card.style.transform = "translateX(120%) rotate(18deg)";
+        card.style.opacity = "0";
+
+        setTimeout(() => {
+          card.classList.add("dragging");
+          card.style.transform = "translateX(0px) rotate(0deg)";
+          card.style.opacity = "1";
+          resetCardPosition();
+          openMatchModal(getCurrentParticipant());
+        }, 250);
+      }
+    }
+
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + state.participants.length) % state.participants.length;
+      renderCurrentCard();
+    }
+
+    function openMatchModal(p) {
+      const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+      document.getElementById("matchCandidateName").textContent = mainName;
+      document.getElementById("matchCandidateCostume").textContent = `🎭 ${costumeDesc}`;
+
+      const avatar = document.getElementById("matchCandidateAvatar");
+      if (p.photo) {
+        avatar.innerHTML = `<img src="${p.photo}" class="w-full h-full object-cover" />`;
+      } else {
+        avatar.innerHTML = p.emoji;
+      }
+
+      document.getElementById("matchConfirmModal").classList.remove("hidden");
+    }
+
+    function cancelMatchVote() {
+      document.getElementById("matchConfirmModal").classList.add("hidden");
+      currentIndex = (currentIndex + 1) % state.participants.length;
+      renderCurrentCard();
+    }
+
+    async function confirmFinalVote() {
+      const p = getCurrentParticipant();
+      if (!p) return;
+
+      p.votes = (p.votes || 0) + 1;
+      state.deviceHasVoted = true;
+      state.deviceVotedFor = p.id;
+
+      localStorage.setItem("relayween_device_voted", JSON.stringify(p.id));
+
+      await saveStateToCloud();
+      document.getElementById("matchConfirmModal").classList.add("hidden");
+
+      if (typeof confetti === "function") {
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      }
+
+      updateUI();
+    }
+
+    function renderVotedPreview() {
+      const targetP = state.participants.find(x => x.id === state.deviceVotedFor) || state.participants[0];
+      if (!targetP) return;
+
+      const { mainName, costumeDesc } = splitNameAndCostume(targetP.name);
+      const logoContainer = document.getElementById("votedBannerLogo");
+      logoContainer.innerHTML = targetP.photo
+        ? `<div class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-amber-400 shadow-lg"><img src="${targetP.photo}" class="w-full h-full object-cover" /></div>`
+        : `<div class="w-24 h-24 rounded-2xl bg-slate-900 border-2 border-amber-400 flex items-center justify-center text-5xl shadow-lg">${targetP.emoji}</div>`;
+
+      const previewBox = document.getElementById("votedForCardPreview");
+      previewBox.innerHTML = `
+        <div class="text-left">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-amber-400">Tu elección</span>
+          <h4 class="font-extrabold text-white text-base">${mainName}</h4>
+          <p class="text-xs text-slate-300">🎭 ${costumeDesc}</p>
+        </div>
+      `;
+    }
+
+    function updateTotalVotesBadge() {
+      const total = state.participants.reduce((acc, curr) => acc + (curr.votes || 0), 0);
+      document.getElementById("totalVotesBadge").textContent = `${total} ${total === 1 ? 'voto' : 'votos'}`;
+    }
+
+    function openQuickJumpModal() {
+      renderQuickJumpList();
+      document.getElementById("quickJumpModal").classList.remove("hidden");
+    }
+
+    function closeQuickJumpModal() {
+      document.getElementById("quickJumpModal").classList.add("hidden");
+    }
+
+    function renderQuickJumpList() {
+      const query = document.getElementById("jumpSearchInput").value.toLowerCase();
+      const container = document.getElementById("quickJumpList");
+      container.innerHTML = "";
+
+      state.participants.forEach((p, idx) => {
+        const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+        if (query && !mainName.toLowerCase().includes(query) && !costumeDesc.toLowerCase().includes(query)) return;
+
+        const div = document.createElement("div");
+        div.className = "flex items-center justify-between p-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 transition border border-white/5 cursor-pointer";
+        div.onclick = () => {
+          currentIndex = idx;
+          closeQuickJumpModal();
+          updateUI();
+        };
+
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-950 flex items-center justify-center text-xl shrink-0">
+              ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover" />` : p.emoji}
+            </div>
+            <div>
+              <h5 class="font-bold text-sm text-white">${mainName}</h5>
+              <p class="text-[11px] text-amber-300 truncate max-w-[200px]">🎭 ${costumeDesc}</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">#${p.id}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function openLightbox(imgSrc, title, subtitle) {
+      document.getElementById("lightboxImg").src = imgSrc;
+      document.getElementById("lightboxTitle").textContent = title;
+      document.getElementById("lightboxSubtitle").textContent = subtitle;
+      document.getElementById("photoLightbox").classList.remove("hidden");
+    }
+
+    function openLightboxCurrent() {
+      const p = getCurrentParticipant();
+      if (!p || !p.photo) return;
+      const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+      openLightbox(p.photo, mainName, `🎭 ${costumeDesc}`);
+    }
+
+    function closeLightbox() {
+      document.getElementById("photoLightbox").classList.add("hidden");
+    }
+
+    function openAdminModal() {
+      document.getElementById("adminModal").classList.remove("hidden");
+      document.getElementById("adminPinScreen").classList.remove("hidden");
+      document.getElementById("adminControls").classList.add("hidden");
+      document.getElementById("adminPinInput").value = "";
+      document.getElementById("pinError").classList.add("hidden");
+    }
+
+    function closeAdminModal() {
+      document.getElementById("adminModal").classList.add("hidden");
+    }
+
+    function verifyAdminPin() {
+      const pin = document.getElementById("adminPinInput").value;
+      if (pin === ADMIN_PIN) {
+        document.getElementById("adminPinScreen").classList.add("hidden");
+        document.getElementById("adminControls").classList.remove("hidden");
+        populateAdminPanel();
+      } else {
+        document.getElementById("pinError").classList.remove("hidden");
+      }
+    }
+
+    function populateAdminPanel() {
+      const container = document.getElementById("adminParticipantsPhotoList");
+      container.innerHTML = "";
+
+      state.participants.forEach((p) => {
+        const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+        const row = document.createElement("div");
+        row.className = "flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800 gap-2";
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5 overflow-hidden">
+            <div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-900 flex items-center justify-center text-lg shrink-0">
+              ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover" />` : p.emoji}
+            </div>
+            <div class="truncate">
+              <input type="text" value="${mainName}" onchange="updateSingleParticipantName(${p.id}, this.value)" class="bg-transparent text-xs font-bold text-white border-b border-transparent hover:border-slate-700 focus:border-amber-400 focus:outline-none w-full" />
+              <span class="text-[10px] text-amber-400">ID #${p.id}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="triggerQuickPhotoUpload(${p.id})" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[11px]">📷 Foto</button>
+            ${p.photo ? `<button onclick="removeParticipantPhoto(${p.id})" class="px-2 py-1 rounded bg-rose-500/20 text-rose-300 text-[11px]">🗑️</button>` : ''}
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      const textarea = document.getElementById("participantsTextarea");
+      textarea.value = state.participants.map(p => p.name).join("\n");
+    }
+
+    function updateSingleParticipantName(id, newName) {
+      const p = state.participants.find(x => x.id === id);
+      if (p) {
+        p.name = newName;
+        saveStateToCloud();
+      }
+    }
+
+    async function saveParticipantsList() {
+      const text = document.getElementById("participantsTextarea").value;
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      if (!lines.length) {
+        alert("La lista no puede estar vacía.");
+        return;
+      }
+
+      state.participants = lines.map((line, idx) => {
+        const existing = state.participants[idx];
+        return {
+          id: idx + 1,
+          name: line,
+          votes: existing ? (existing.votes || 0) : 0,
+          emoji: existing ? existing.emoji : EMOJIS[idx % EMOJIS.length],
+          photo: existing ? existing.photo : null
+        };
+      });
+
+      await saveStateToCloud();
+      currentIndex = 0;
+      populateAdminPanel();
+      alert("¡Nombres actualizados en la nube!");
+    }
+
+    async function finishVoting() {
+      state.isFinished = true;
+      await saveStateToCloud();
+      closeAdminModal();
+      if (typeof confetti === "function") {
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+      }
+    }
+
+    async function reopenVoting() {
+      state.isFinished = false;
+      await saveStateToCloud();
+      closeAdminModal();
+    }
+
+    async function resetAllVotes() {
+      if (confirm("¿Estás seguro de poner todos los votos a 0 en la nube?")) {
+        state.participants.forEach(p => p.votes = 0);
+        state.deviceHasVoted = false;
+        state.deviceVotedFor = null;
+        localStorage.removeItem("relayween_device_voted");
+        await saveStateToCloud();
+        alert("Votos reiniciados para todos.");
+      }
+    }
+
+    function triggerQuickPhotoUpload(participantId) {
+      currentPhotoUploadTargetId = participantId;
+      document.getElementById("hiddenFileInput").click();
+    }
+
+    function handleQuickFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !currentPhotoUploadTargetId) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        // Redimensionar imagen para que sea ligera y quepa sin problemas en Firestore
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = async function() {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 400;
+          const scaleSize = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scaleSize;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+          const p = state.participants.find(x => x.id === currentPhotoUploadTargetId);
+          if (p) {
+            p.photo = compressedBase64;
+            await saveStateToCloud();
+            if (!document.getElementById("adminModal").classList.contains("hidden")) {
+              populateAdminPanel();
+            }
+          }
+        };
+        event.target.value = "";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function removeParticipantPhoto(participantId) {
+      const p = state.participants.find(x => x.id === participantId);
+      if (p) {
+        p.photo = null;
+        await saveStateToCloud();
+        if (!document.getElementById("adminModal").classList.contains("hidden")) {
+          populateAdminPanel();
+        }
+      }
+    }
+
+    function toggleQuickPhotoEdit(forceState) {
+      quickPhotoEditMode = typeof forceState === 'boolean' ? forceState : !quickPhotoEditMode;
+      const bannerBtn = document.getElementById("quickEditBannerBtn");
+      if (quickPhotoEditMode) {
+        bannerBtn.classList.remove("hidden");
+      } else {
+        bannerBtn.classList.add("hidden");
+      }
+      renderCurrentCard();
+    }
+
+    function triggerLogoUpload() {
+      document.getElementById("hiddenLogoInput").click();
+    }
+
+    function handleLogoFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        state.companyLogo = e.target.result;
+        await saveStateToCloud();
+        populateAdminPanel();
+        event.target.value = "";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function removeCompanyLogo() {
+      state.companyLogo = null;
+      await saveStateToCloud();
+      populateAdminPanel();
+    }
+
+    function renderPodiumAndRanking() {
+      const sorted = [...state.participants].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+      const podiumContainer = document.getElementById("podiumContainer");
+      podiumContainer.innerHTML = "";
+
+      const top3 = [sorted[1], sorted[0], sorted[2]];
+
+      top3.forEach((p, index) => {
+        if (!p) return;
+        const actualRank = index === 0 ? 2 : (index === 1 ? 1 : 3);
+        const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+        const podiumClass = actualRank === 1 ? "podium-1 md:-translate-y-4" : (actualRank === 2 ? "podium-2" : "podium-3");
+        const medalEmoji = actualRank === 1 ? "👑" : (actualRank === 2 ? "🥈" : "🥉");
+
+        const card = document.createElement("div");
+        card.className = `glass-card rounded-3xl p-6 text-center shadow-xl relative ${podiumClass} flex flex-col items-center`;
+        card.innerHTML = `
+          <div class="absolute -top-4 text-3xl">${medalEmoji}</div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden bg-slate-900 border-2 border-white/20 my-3 flex items-center justify-center text-4xl shadow-inner">
+            ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover" />` : p.emoji}
+          </div>
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-300 mb-1">#${actualRank} Lugar</span>
+          <h3 class="text-xl font-extrabold text-white truncate max-w-full">${mainName}</h3>
+          <p class="text-xs text-slate-300 mt-0.5 mb-3">🎭 ${costumeDesc}</p>
+          <div class="mt-auto px-4 py-1.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs font-extrabold">
+            ${p.votes || 0} ${p.votes === 1 ? 'voto' : 'votos'}
+          </div>
+        `;
+        podiumContainer.appendChild(card);
+      });
+
+      const rankingList = document.getElementById("fullRankingList");
+      rankingList.innerHTML = "";
+
+      sorted.forEach((p, idx) => {
+        const { mainName, costumeDesc } = splitNameAndCostume(p.name);
+        const row = document.createElement("div");
+        row.className = "flex items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-white/5";
+        row.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-slate-400 w-6">#${idx + 1}</span>
+            <div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-950 flex items-center justify-center text-lg shrink-0">
+              ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover" />` : p.emoji}
+            </div>
+            <div>
+              <h5 class="font-bold text-sm text-white">${mainName}</h5>
+              <p class="text-[11px] text-slate-400">🎭 ${costumeDesc}</p>
+            </div>
+          </div>
+          <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+            ${p.votes || 0} votos
+          </span>
+        `;
+        rankingList.appendChild(row);
+      });
+    }
   </script>
 </body>
 </html>

@@ -1,3 +1,8 @@
+Aquí tienes el **código completo y corregido** de la aplicación.
+
+Se han colocado los botones de subida de fotos fuera de la tarjeta interactiva para evitar cualquier bloqueo táctil, y se han separado los selectores de archivo para que los dispositivos móviles permitan **elegir de la galería** o **tomar una foto con la cámara** sin problemas.
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -131,7 +136,7 @@
         </div>
 
         <!-- Pila de Tarjetas -->
-        <div class="relative w-full h-[460px] sm:h-[510px] flex items-center justify-center select-none">
+        <div class="relative w-full h-[440px] sm:h-[480px] flex items-center justify-center select-none">
           <div id="backgroundCard" class="next-card-preview absolute inset-0 rounded-3xl overflow-hidden bg-slate-900 border border-white/10 pointer-events-none"></div>
 
           <div id="mainSwipeCard" class="swipe-card relative w-full h-full rounded-3xl overflow-hidden bg-slate-900 border-2 border-white/15 shadow-2xl cursor-grab flex flex-col justify-end">
@@ -150,22 +155,8 @@
               <span id="activeCardNumber" class="bg-slate-950/75 text-amber-300 text-xs font-extrabold px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
                 Participante #1
               </span>
-              <div class="flex items-center gap-2">
-                <button id="btnExpandPhoto" onclick="event.stopPropagation(); openLightboxCurrent()" class="hidden bg-slate-950/75 hover:bg-slate-900 text-white text-xs px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
-                  🔍 Foto completa
-                </button>
-              </div>
-            </div>
-
-            <!-- Botones de Edición Rápida (Protegidos contra eventos de arrastre) -->
-            <div id="quickEditOverlay" class="hidden absolute top-14 inset-x-4 z-30 bg-slate-950/90 backdrop-blur-md p-3 rounded-2xl border border-emerald-500/50 flex flex-wrap gap-2 items-center justify-between" 
-                 onpointerdown="event.stopPropagation()" 
-                 onclick="event.stopPropagation()">
-              <button type="button" onclick="triggerQuickPhotoUpload(getCurrentParticipant().id)" class="flex-1 py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs cursor-pointer">
-                📷 Tomar / Subir Foto
-              </button>
-              <button type="button" onclick="removeParticipantPhoto(getCurrentParticipant().id)" class="py-2 px-3 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer">
-                🗑️ Quitar
+              <button id="btnExpandPhoto" onclick="event.stopPropagation(); openLightboxCurrent()" class="hidden bg-slate-950/75 hover:bg-slate-900 text-white text-xs px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
+                🔍 Foto completa
               </button>
             </div>
 
@@ -176,16 +167,23 @@
               <h2 id="activeCardName" class="text-2xl sm:text-3xl font-extrabold text-white leading-tight drop-shadow">
                 Participante 1
               </h2>
-              <p class="text-xs text-slate-300 mt-1">
-                Desliza a la derecha o toca 💛 para darle tu voto
-              </p>
+              <p class="text-xs text-slate-300 mt-1">Desliza a la derecha o toca 💛 para darle tu voto</p>
             </div>
-
           </div>
         </div>
 
+        <!-- Barra de Edición Rápida Externa (Fuera de la tarjeta para accesibilidad total) -->
+        <div id="quickEditOverlay" class="hidden mt-3 w-full bg-slate-950/90 backdrop-blur-md p-3 rounded-2xl border border-emerald-500/50 flex gap-2 items-center justify-between z-30">
+          <button type="button" onclick="triggerQuickPhotoUpload(getCurrentParticipant().id)" class="flex-1 py-2.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs text-center cursor-pointer">
+            📷 Seleccionar / Tomar Foto
+          </button>
+          <button type="button" onclick="removeParticipantPhoto(getCurrentParticipant().id)" class="py-2.5 px-3 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-semibold cursor-pointer">
+            🗑️ Quitar
+          </button>
+        </div>
+
         <!-- Botonera Inferior -->
-        <div class="flex items-center justify-center gap-4 sm:gap-6 mt-6">
+        <div class="flex items-center justify-center gap-4 sm:gap-6 mt-4">
           <button onclick="prevCard()" title="Anterior" class="w-12 h-12 rounded-full glass-card hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-lg shadow-lg active:scale-90 transition">
             ↩️
           </button>
@@ -274,9 +272,9 @@
     </div>
   </div>
 
-  <!-- Inputs de archivo mejorados para permitir cámara y galería -->
-  <input type="file" id="hiddenFileInput" accept="image/*" capture="environment" class="hidden" onchange="handleQuickFileUpload(event)" />
-  <input type="file" id="hiddenLogoInput" accept="image/*" capture="environment" class="hidden" onchange="handleLogoFileUpload(event)" />
+  <!-- Inputs de archivo ocultos -->
+  <input type="file" id="hiddenFileInput" accept="image/*" class="hidden" onchange="handleQuickFileUpload(event)" />
+  <input type="file" id="hiddenLogoInput" accept="image/*" class="hidden" onchange="handleLogoFileUpload(event)" />
 
   <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl max-w-2xl w-full p-6 border border-slate-700 max-h-[90vh] overflow-y-auto">
@@ -937,7 +935,9 @@
 
     function triggerQuickPhotoUpload(participantId) {
       currentPhotoUploadTargetId = participantId;
-      document.getElementById("hiddenFileInput").click();
+      const fileInput = document.getElementById("hiddenFileInput");
+      fileInput.value = "";
+      fileInput.click();
     }
 
     function handleQuickFileUpload(event) {
@@ -967,7 +967,6 @@
             }
           }
         };
-        event.target.value = "";
       };
       reader.readAsDataURL(file);
     }
@@ -1059,7 +1058,7 @@
         row.innerHTML = `
           <div class="flex items-center gap-3">
             <span class="text-xs font-bold text-slate-400 w-6">#${idx + 1}</span>
-            <div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-950 flex items-center justify-center text-xl shrink-0">
+            <div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-950 flex items-center justify-center text-lg shrink-0">
               ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover" />` : p.emoji}
             </div>
             <div>
@@ -1077,3 +1076,5 @@
   </script>
 </body>
 </html>
+
+```

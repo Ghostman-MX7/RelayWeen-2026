@@ -60,7 +60,6 @@
   <header class="border-b border-white/10 bg-slate-950/60 backdrop-blur-md sticky top-0 z-30">
     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Logo de la Empresa + Título RelayWeen 2026 -->
       <div class="flex items-center gap-3">
         <div id="headerLogoContainer" class="flex items-center justify-center rounded-xl transition"></div>
         <div>
@@ -104,7 +103,12 @@
         <p class="text-slate-300 text-sm mb-5">
           Solo se permite un voto por dispositivo. Espera al cierre de la votación para conocer al <strong>1.º, 2.º y 3.º lugar</strong>.
         </p>
-        <div id="votedForCardPreview" class="bg-slate-900/80 p-4 rounded-2xl border border-white/10 inline-flex items-center gap-3"></div>
+        <div id="votedForCardPreview" class="bg-slate-900/80 p-4 rounded-2xl border border-white/10 inline-flex items-center gap-3 mb-4"></div>
+        <div>
+          <button onclick="clearMyLocalVote()" class="text-xs font-semibold text-rose-400 hover:underline">
+            🔄 Borrar mi voto para volver a probar
+          </button>
+        </div>
       </div>
 
       <!-- Contenedor principal del Deck estilo Bumble -->
@@ -157,9 +161,6 @@
               <button onclick="triggerQuickPhotoUpload(getCurrentParticipant().id)" class="flex-1 py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs">
                 📷 Subir / Cambiar Foto
               </button>
-              <button onclick="quickRenameParticipant(getCurrentParticipant().id)" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
-                ✏️ Nombre
-              </button>
               <button onclick="removeParticipantPhoto(getCurrentParticipant().id)" class="py-2 px-3 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-semibold">
                 🗑️
               </button>
@@ -173,7 +174,7 @@
                 Participante 1
               </h2>
               <p class="text-xs text-slate-300 mt-1">
-                Desliza a la derecha o toca 💛 para darle tu voto en RelayWeen 2026
+                Desliza a la derecha o toca 💛 para darle tu voto
               </p>
             </div>
 
@@ -332,14 +333,14 @@
         </div>
 
         <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
-          <span class="text-xs text-slate-500">¿Reiniciar pruebas?</span>
-          <button onclick="resetAllVotes()" class="text-xs text-rose-400 hover:underline font-semibold">🗑️ Poner votos a 0</button>
+          <button onclick="clearMyLocalVote()" class="text-xs text-amber-400 hover:underline font-semibold">🔄 Resetear mi voto local</button>
+          <button onclick="resetAllVotes()" class="text-xs text-rose-400 hover:underline font-semibold">🗑️ Poner votos globales a 0</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= LÓGICA CON FIREBASE FIRESTORE ================= -->
+  <!-- ================= LÓGICA CON FIREBASE FIRESTORE Y SWIPE MEJORADO ================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
     import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
@@ -365,7 +366,6 @@
       companyLogo: null,
       participants: [],
       isFinished: false,
-      votingMode: "device",
       deviceHasVoted: false,
       deviceVotedFor: null
     };
@@ -383,13 +383,13 @@
     window.verifyAdminPin = verifyAdminPin;
     window.toggleQuickPhotoEdit = toggleQuickPhotoEdit;
     window.triggerQuickPhotoUpload = triggerQuickPhotoUpload;
-    window.quickRenameParticipant = quickRenameParticipant;
     window.removeParticipantPhoto = removeParticipantPhoto;
     window.triggerLogoUpload = triggerLogoUpload;
     window.removeCompanyLogo = removeCompanyLogo;
     window.finishVoting = finishVoting;
     window.reopenVoting = reopenVoting;
     window.resetAllVotes = resetAllVotes;
+    window.clearMyLocalVote = clearMyLocalVote;
     window.saveParticipantsList = saveParticipantsList;
     window.prevCard = prevCard;
     window.triggerSwipe = triggerSwipe;
@@ -403,14 +403,8 @@
     window.closeLightbox = closeLightbox;
     window.updateSingleParticipantName = updateSingleParticipantName;
 
-    // Inicializar conexión en tiempo real con Firebase Firestore
     window.addEventListener("DOMContentLoaded", () => {
-      // Revisar si este dispositivo ya votó previamente en su navegador
-      const localVoted = localStorage.getItem("relayween_device_voted");
-      if (localVoted) {
-        state.deviceHasVoted = true;
-        state.deviceVotedFor = JSON.parse(localVoted);
-      }
+      checkLocalVote();
 
       onSnapshot(doc(db, "relayween", "contestState"), (docSnap) => {
         if (docSnap.exists()) {
@@ -433,6 +427,24 @@
 
       setupSwipeListeners();
     });
+
+    function checkLocalVote() {
+      const localVoted = localStorage.getItem("relayween_device_voted");
+      if (localVoted) {
+        state.deviceHasVoted = true;
+        state.deviceVotedFor = JSON.parse(localVoted);
+      } else {
+        state.deviceHasVoted = false;
+        state.deviceVotedFor = null;
+      }
+    }
+
+    function clearMyLocalVote() {
+      localStorage.removeItem("relayween_device_voted");
+      state.deviceHasVoted = false;
+      state.deviceVotedFor = null;
+      updateUI();
+    }
 
     async function resetDefaultState() {
       const initialParts = PARTICIPANTES_INICIALES.map((name, index) => ({
@@ -574,19 +586,25 @@
       }
     }
 
+    // Configuración optimizada de listeners para Arrastre / Swipe en Móviles y Escritorio
     function setupSwipeListeners() {
       const card = document.getElementById("mainSwipeCard");
 
       card.addEventListener("pointerdown", (e) => {
         if (state.isFinished || (state.deviceHasVoted && !quickPhotoEditMode)) return;
         if (e.target.closest("button")) return;
+        
         isDragging = true;
         startX = e.clientX;
         currentDeltaX = 0;
         card.classList.add("dragging");
+        
+        if (card.setPointerCapture) {
+          card.setPointerCapture(e.pointerId);
+        }
       });
 
-      window.addEventListener("pointermove", (e) => {
+      card.addEventListener("pointermove", (e) => {
         if (!isDragging) return;
         currentDeltaX = e.clientX - startX;
         const rotate = currentDeltaX * 0.06;
@@ -607,12 +625,16 @@
         }
       });
 
-      window.addEventListener("pointerup", () => {
+      const handlePointerEnd = (e) => {
         if (!isDragging) return;
         isDragging = false;
         card.classList.remove("dragging");
 
-        const threshold = 95;
+        if (card.releasePointerCapture) {
+          try { card.releasePointerCapture(e.pointerId); } catch(err){}
+        }
+
+        const threshold = 80;
         if (currentDeltaX > threshold) {
           triggerSwipe("right");
         } else if (currentDeltaX < -threshold) {
@@ -621,7 +643,10 @@
           resetCardPosition();
         }
         currentDeltaX = 0;
-      });
+      };
+
+      card.addEventListener("pointerup", handlePointerEnd);
+      card.addEventListener("pointercancel", handlePointerEnd);
     }
 
     function resetCardPosition() {
@@ -648,7 +673,7 @@
           card.style.opacity = "1";
           resetCardPosition();
           renderCurrentCard();
-        }, 250);
+        }, 200);
       } else {
         stampVote.style.opacity = 1;
         card.style.transform = "translateX(120%) rotate(18deg)";
@@ -660,7 +685,7 @@
           card.style.opacity = "1";
           resetCardPosition();
           openMatchModal(getCurrentParticipant());
-        }, 250);
+        }, 200);
       }
     }
 
@@ -899,9 +924,7 @@
     async function resetAllVotes() {
       if (confirm("¿Estás seguro de poner todos los votos a 0 en la nube?")) {
         state.participants.forEach(p => p.votes = 0);
-        state.deviceHasVoted = false;
-        state.deviceVotedFor = null;
-        localStorage.removeItem("relayween_device_voted");
+        clearMyLocalVote();
         await saveStateToCloud();
         alert("Votos reiniciados para todos.");
       }
@@ -918,7 +941,6 @@
 
       const reader = new FileReader();
       reader.onload = async function(e) {
-        // Redimensionar imagen para que sea ligera y quepa sin problemas en Firestore
         const img = new Image();
         img.src = e.target.result;
         img.onload = async function() {
